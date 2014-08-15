@@ -2,28 +2,44 @@
 
 <script src="{{ asset('js/masonry.pkgd.min.js') }}"></script>
 <script src="{{ asset('js/imagesloaded.pkgd.min.js') }}"></script>
-<script src="{{ asset('js/jquery.jscroll.min.js') }}"></script>
 <script src="{{ asset('js/jquery.infinitescroll.min.js') }}"></script>
+
    
 <script type="text/javascript">
 jQuery(document).ready( function($) {
+	
 	$('#image_container').imagesLoaded( function() {
 		  $('#image_container').masonry({
 			  itemSelector: '.item',
 		        columnWidth : 240 
 			  });
+
+	
 		});
 
-	$(function() {
-	    $('#image_container').jscroll({
-	        autoTrigger: true,
-	        nextSelector: '.pagination li.active + li a', 
-	        contentSelector: 'div#image_container',
-	        callback: function() {
-	            $('ol.pagination:visible:first').hide();
-	        }
-	    });
-	});  
+	  $('#image_container').infinitescroll({
+          navSelector     : ".pagination",
+          nextSelector    : ".pagination a:last",
+          itemSelector    : ".item",
+          debug           : false,
+          dataType        : 'html',
+          path: function(index) {
+              return "?page=" + index;
+          },
+          loading: {
+              finishedMsg: ""
+          }
+      }, function(newElements, data, url){
+          var $newElems = $( newElements );
+          $newElems.imagesLoaded(function(){
+          $('#image_container').masonry( 'appended', $newElems, false);
+          });
+
+      });
+
+	  $('.pagination').hide();
+      
+
 });
 </script>
 
@@ -33,20 +49,17 @@ jQuery(document).ready( function($) {
 	@if($images->count())
 		<div id="image_container">		
 		    <div id="list">
-		    <ol>
 		    @foreach($images as $image)
-			    <div >
-			    <li><img class="item" src="{{ URL::asset('img/temp/'.$image->image_path) }}"></li>
+			    <div>
+			    <img class="item" src="{{ URL::asset('img/temp/'.$image->image_path) }}">
 			    </div>
 		    @endforeach
-		    </ol>
 		    </div>
 		
-			<div class="col-span-12">
-    			<div class="paginate text-center">
-                 {{$images->links()}}
-               </div> 
-            </div>
+		<div>
+		{{$images->links()}}
+		</div>
+		
 	    </div>		
 	@else
 		<div class="col-lg-12">
@@ -58,17 +71,9 @@ jQuery(document).ready( function($) {
 </div>
 
 
-@if($images->count())
-	<div class="row">
-	    <div class="col-md-12 text-center">
-	    	@if(isset($appends))
-	        	{{ $images->appends($appends)->links(); }}
-	        @else
-				
-	        @endif
-	    </div>
-	</div>
-@endif
+
+
+
 
 @section('scripts')
 	@if(count($images))
