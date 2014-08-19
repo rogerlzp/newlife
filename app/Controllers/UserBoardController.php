@@ -3,6 +3,7 @@
 use Tricks\Repositories\BoardRepositoryInterface;
 use Tricks\Repositories\CategoryRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 
 use Illuminate\Support\Facades\Log;
 
@@ -67,6 +68,18 @@ class UserBoardController extends BaseController {
 		Log::info($boards);
 		return $this->view('board.list', ['boardList' => $boards]);
 		
+	}
+	
+	/**
+	 * Get the board list created by current user
+	 *
+	 */
+	public function getListByUserId() {		
+		$boards = $this->board->findAllForUserId(Auth::user()->id);
+		Log::info('getListByUserId');
+		Log::info($boards);
+		return $boards;
+	
 	}
 	
 	

@@ -12,13 +12,22 @@
 }
 
 .item {
+	width: 100%; /* 300px */
+	float: left;
+	margin: 0 1.515% 1.075em; /* 15px 30px */
+	height:100%;
+}
+
+#image_wrapper {
 	width: 20.303%; /* 300px */
 	float: left;
 	margin: 0 1.515% 1.075em; /* 15px 30px */
 }
 
-.item .editable {
+
+#image_wrapper .editable {
     background: rgba(255, 255, 255, 0.4);
+    background-image: url("add.jpg");
     border: 2px solid rgba(255, 255, 255, 0.4);
     -webkit-border-radius: 4px;
        -moz-border-radius: 4px;
@@ -27,6 +36,27 @@
     right: 7px;
     top: 7px;
     color: white;
+}
+
+#image_wrapper:hover .editable {
+    display: block;
+}
+
+#image_wrapper .editable .borderable {
+    background: rgba(0, 0, 0, 0.8);
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 8px;
+    display: inline-block;
+}
+
+
+#image-preview {
+	width:100px;
+	height:100px;
+	
 }
 
 /* Start Pins */
@@ -47,7 +77,7 @@
     width: 240px;
 }
 
-.pin .editable {
+#image_wrapper .editable {
     background: rgba(255, 255, 255, 0.4);
     border: 2px solid rgba(255, 255, 255, 0.4);
     -webkit-border-radius: 4px;
@@ -59,11 +89,11 @@
     color: white;
 }
 
-.pin:hover .editable {
+#image_wrapper:hover .editable {
     display: block;
 }
 
-.pin .editable .borderable {
+#image_wrapper .editable .borderable {
     background: rgba(0, 0, 0, 0.8);
     -webkit-border-radius: 4px;
        -moz-border-radius: 4px;
@@ -73,72 +103,11 @@
     display: inline-block;
 }
 
-.pin .image-wrapper {
-    background-image: url("../img/loader.gif");
-    background-position: center center;
-    background-repeat: no-repeat;
-}
-
-.pin img {
-    -webkit-border-top-left-radius: 3px;
-        -moz-border-radius-topleft: 3px;
-            border-top-left-radius: 3px;
-    -webkit-border-top-right-radius: 3px;
-        -moz-border-radius-topright: 3px;
-            border-top-right-radius: 3px;
-    cursor: -webkit-zoom-in;
-    cursor:    -moz-zoom-in;
-    display: block;
-    margin: 0;
-    padding: 0;
-    width: 240px;
-}
-
-.pin p {
-    border-bottom: 1px solid #ddd;
-    font-family: 'Georgia', 'Times', 'Times New Roman', serif;
-    font-size: 12px;
-    margin-bottom: 0;
-    padding: 8px;
-}
-
-.pin strong {
-    color: #777;
-    font-weight: normal;
-}
-
-.pin-footer {
-    color: #777;
-    cursor: default;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 10px;
-}
-
-.pin-footer .dim {
-    color: #999;
-    font-weight: normal;
-}
-
-.pin-footer .avatar {
-    background: white;
-    -webkit-border-radius: 3px;
-       -moz-border-radius: 3px;
-            border-radius: 3px;
-}
-
-.pin-footer .avatar img {
-    -webkit-border-radius: 3px;
-       -moz-border-radius: 3px;
-            border-radius: 3px;
-    height: 30px;
-    width: 30px;
-}
-
-.pin-footer .text {
-    line-height: 16px;
-    margin-top: -1px;
-    width: 180px;
+.ui-dialog-osx {
+    -moz-border-radius: 0 0 8px 8px;
+    -webkit-border-radius: 0 0 8px 8px;
+    border-radius: 0 0 8px 8px; 
+    border-width: 100 8px 8px 8px;
 }
 
 .spinner {

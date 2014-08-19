@@ -10,7 +10,7 @@ jQuery(document).ready( function($) {
 	
 	$('#image_container').imagesLoaded( function() {
 		  $('#image_container').masonry({
-			  itemSelector: '.item',
+			  itemSelector: '#image_wrapper',
 		        columnWidth : 240 
 			  });
 
@@ -20,7 +20,7 @@ jQuery(document).ready( function($) {
 	  $('#image_container').infinitescroll({
           navSelector     : ".pagination",
           nextSelector    : ".pagination a:last",
-          itemSelector    : ".item",
+          itemSelector    : "#image_wrapper",
           debug           : false,
           dataType        : 'html',
           path: function(index) {
@@ -39,21 +39,59 @@ jQuery(document).ready( function($) {
 
 	  $('.pagination').hide();
       
-
 });
+
+
+function addPin($id, $image_id, $image_path){
+
+
+	if($id == 'login') {
+		window.location.href = "http://stackoverflow.com";
+	}
+
+		
+$("#dialog-message").dialog({
+    modal: true,
+    draggable: true,
+    resizable: true,
+
+    width: 400,
+    dialogClass: 'ui-dialog-osx',
+    buttons: {
+        "I've read and understand this": function() {
+            $(this).dialog("close");
+        }
+    }
+});
+
+}
+
 </script>
 
  
-<div class="row js-trick-container">
+<div class=" content-box">
 <p> 
 	@if($images->count())
 		<div id="image_container">		
 		    <div id="list">
+		    @if (Auth::check())
 		    @foreach($images as $image)
-			    <div>
+			    <div id="image_wrapper">
 			    <img class="item" src="{{ URL::asset('img/temp/'.$image->image_path) }}">
+
+			<input type="button" class="editable" value="pin" hidden="true" onclick="addPin({{Auth::user()->id}}, {{$image->id}}, {{$image->image_path}})"/>
 			    </div>
 		    @endforeach
+		    @else
+		        @foreach($images as $image)
+			    <div id="image_wrapper">
+			    <img class="item" src="{{ URL::asset('img/temp/'.$image->image_path) }}">
+
+			<input type="button" class="editable" value="pin" hidden="true" onclick="addPin('login', {{$image->id}}, {{$image->image_path}}))"/>
+			    </div>
+		    @endforeach
+		    @endif
+		    
 		    </div>
 		
 		<div>

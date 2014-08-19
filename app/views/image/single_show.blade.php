@@ -1,5 +1,24 @@
 @section('title', trans('user.profile'))
 
+@section('scripts')
+<script type="text/javascript">
+
+function addComment(){
+
+	$.ajax({ 
+        url: "{{URL::route('user.comment')}}",
+        dataType: 'json', 
+        data: {'image_id': "{{$image->id}}", content:$('#comment_text').val(), _token: "{{ csrf_token() }}"}  ,
+        type: "POST", 
+        success: function(output){ 
+            alert(output);
+        } 
+    }); 
+}
+</script>
+@stop
+
+
 @section('content')
 <div class="container">
 	@if(Session::has('first_use'))
@@ -25,8 +44,12 @@
 	<div id="image_container">
 		<div><img src="{{ URL::asset('img/temp/'.$image->image_path) }}"></div>
 		<div><p>描述: {{ $image->description }}</div>
-	
 	</div>
+	</div>
+	
+	<div class="comment-form-image">
+		<input type="text" id="comment_text" placeholder="add some comment...">
+		<input type="button" value="comment" onclick="addComment()">	
 	</div>
 	
 </div>

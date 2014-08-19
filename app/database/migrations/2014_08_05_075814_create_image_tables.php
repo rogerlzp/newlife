@@ -26,6 +26,7 @@ class CreateImageTables extends Migration {
 			$table->integer('comments');
 			$table->integer('likes');
 			$table->integer('shares');
+			$table->enum('image_type', array('local', 'net'))->default('local');
 			
 			$table->foreign('user_id')->references('id')
 				->on('users')->onUpdate('cascade')

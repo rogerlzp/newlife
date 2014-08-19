@@ -19,6 +19,12 @@ class Board extends Model {
 		return $this->belongsTo('Tricks\User');
 	}
 	
+	/**
+	 * Relationship with Comment table
+	 */
+	public function comments() {
+		return $this->morphMany('Comment', 'commentable');
+	}
 	
 	
 }

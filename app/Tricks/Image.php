@@ -18,6 +18,12 @@ class Image extends Model {
 	}
 	
 	
+	/**
+	 * Relationship with Comment table
+	 */
+	public function comments() {
+		return $this->morphMany('Comment', 'commentable');
+	}
 	
 	
 }

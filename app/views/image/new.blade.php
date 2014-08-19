@@ -133,9 +133,11 @@ jQuery(function ($){
 							</div>
 							<div class="btn btn-sm btn-primary js-fileapi-wrapper">
 								<div class="js-browse">
-									<span class="btn-txt">{{ trans('user.choose') }}</span> <input
-										type="file" name="filedata">
+									<span class="btn-txt">{{ trans('user.choose') }}</span> 
+									<input type="file" name="filedata">
 								</div>
+								
+								
 								<div class="js-upload" style="display: none;">
 									<div class="progress progress-success">
 										<div class="js-progress bar"></div>
@@ -143,8 +145,11 @@ jQuery(function ($){
 									<span class="btn-txt">{{ trans('user.uploading') }}</span>
 								</div>
 							</div>
+							
 						</div>
 					</div>
+					
+					
 				</div>
 
 

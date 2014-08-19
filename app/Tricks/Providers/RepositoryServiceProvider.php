@@ -55,5 +55,10 @@ class RepositoryServiceProvider extends ServiceProvider
         		'Tricks\Repositories\Eloquent\ImageBoardRepository'
         );
         
+        $this->app->bind(
+        		'Tricks\Repositories\CommentRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\CommentRepository'
+        );
+        
     }
 }

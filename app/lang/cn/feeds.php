@@ -1,9 +1,9 @@
 <?php 
 
 return array(
-	'title' => 'Laravel-Tricks',	
+	'title' => '寒舍',	
 	'link' => 'http://www.laravel-tricks.com',	
-	'sub_title' => 'Laravel tricks is a website that aggregates useful tips and tricks for Laravel PHP framework',
+	'sub_title' => '寒舍',
 	'author' => '
 	    <author>
 		<name>Maks Surguy</name>

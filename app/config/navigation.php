@@ -6,26 +6,38 @@ return array(
 
 	'menu' => array(
 		array(
-			'label' => 'Browse',
+			'label' => '浏览',
 			'route' => 'browse.recent',
 			'active' => array('/','popular','comments')
 		),
 		array(
-			'label' => 'Categories',
+			'label' => '分类',
 			'route' => 'browse.categories',
 			'active' => array('categories*')
 		),
 		array(
-			'label' => 'Tags',
+			'label' => '标签',
 			'route' => 'browse.tags',
 			'active' => array('tags*')
 		),
 		array(
-			'label' => 'Create New',
+			'label' => '新建trick',
 			'route' => 'tricks.new',
 			'active' => array('user/tricks/new'),
 			// 'logged_in' => true
 		),
+		array(
+					'label' => '上传本地图片',
+					'route' => 'image.new_local',
+					'active' => array('user/image/new'),
+					// 'logged_in' => true
+		),
+		array(
+					'label' => '抓取网络图片',
+					'route' => 'image.new_net',
+					'active' => array('user/image/new_net'),
+					// 'logged_in' => true
+			),
 		array(
 			'label' => '图片',
 			'route' => 'image.first',
@@ -36,17 +48,17 @@ return array(
 
 	'browse' => array(
 		array(
-			'label' => 'Most recent',
+			'label' => '最新',
 			'route' => 'browse.recent',
 			'active' => array('/')
 		),
 		array(
-			'label' => 'Most popular',
+			'label' => '最流行',
 			'route' => 'browse.popular',
 			'active' => array('popular')
 		),
 		array(
-			'label' => 'Most commented',
+			'label' => '推荐',
 			'route' => 'browse.comments',
 			'active' => array('comments')
 		),

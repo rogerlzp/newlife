@@ -78,8 +78,20 @@ class BoardRepository extends AbstractRepository implements BoardRepositoryInter
 	{
 		Log::info($user->username);
 		$boards = $user->boards()->orderBy('created_at', 'DESC')->lists('board_name', 'id');
+		return $boards;
+	}
 	
-		
+	/**
+	 * Find all the boards for the given user.
+	 *
+	 * @param  \Tricks\User $user
+	 */
+	public function findAllForUserId($id)
+	{
+		$user = User::find($id);
+		$boards = $user->boards()->orderBy('created_at', 'DESC')->get();
+	
+	
 		return $boards;
 	}
 		

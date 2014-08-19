@@ -34,6 +34,8 @@
 	  <script
 	src="{{ asset('js/tmpcdn/bootstrap.min.js') }}"></script>
 
+
+	
     </head>
 
     <body>

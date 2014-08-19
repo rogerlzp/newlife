@@ -100,10 +100,20 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
     # Board list route
     Route::get('user/board/list', ['as' => 'user.board', 'uses' => 'UserBoardController@getList' ]);
     
+    # Board list route
+    Route::get('user/board/list2', ['as' => 'user.board2', 'uses' => 'UserBoardController@getListByUserId' ]);
+    
     
     # Image creation route
-    Route::get('user/image/new', [ 'as' => 'image.new', 'uses' => 'UserImageController@getNew' ]);
-    Route::post('user/image/new', 'UserImageController@postNew');
+    Route::get('user/image/new_local', [ 'as' => 'image.new_local', 'uses' => 'UserImageController@getNewLocal' ]);
+    Route::post('user/image/new_local', 'UserImageController@postNewLocal');
+    
+    # Image creation route
+    Route::get('user/image/new_net', [ 'as' => 'image.new_net', 'uses' => 'UserImageController@getNewNet' ]);
+    Route::post('user/image/new_net', 'UserImageController@postNewNet');
+    
+    # Image pin route
+    Route::get('user/image/pin', [ 'as' => 'image.pin', 'uses' => 'UserImageController@postPin' ]);
     
     # Image list
     Route::get('image/first', [ 'as' => 'image.first', 'uses' => 'ImageController@getIndex' ]);
@@ -116,6 +126,10 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
     
     Route::post('image/upload', ['as' => 'image.upload', 'uses' => 'ImageController@postUpload']);
 
+    
+    # Add Comment route
+   Route::post('user/comment', ['as' => 'user.comment', 'uses' => 'CommentController@postComment']);
+    
     
     
 });
