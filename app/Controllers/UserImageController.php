@@ -40,9 +40,8 @@ class UserImageController extends BaseController {
 	{
 	//	Log::info('getNew');
 		$user = Auth::user();
-		
-		Log::info('username ='.$user->username);
 		$boardList = $this->board->findAllForUser($user);
+		
 		$this->view('image.new', compact('boardList'));
 	}
 	
@@ -54,6 +53,7 @@ class UserImageController extends BaseController {
 	 */
 	public function postNewLocal()
 	{
+		Log::info('postNewLocal');
 		$form = $this->image->getCreationForm();
 	
 		if (! $form->isValid()) {
@@ -71,7 +71,7 @@ class UserImageController extends BaseController {
 		
 		$image_board_data = [];
 		$image_board_data['user_id']  = Auth::user()->id;
-		$image_board_data['board_id'] = $data['boards'][0];
+		$image_board_data['board_id'] = $data['boards'];
 		$image_board_data['image_id'] = $image->id;
 		$this->image_board->create($image_board_data);
 		

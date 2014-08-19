@@ -2,19 +2,26 @@
 
 @section('scripts')
 <script type="text/javascript">
-
 function addComment(){
-
 	$.ajax({ 
         url: "{{URL::route('user.comment')}}",
         dataType: 'json', 
         data: {'image_id': "{{$image->id}}", content:$('#comment_text').val(), _token: "{{ csrf_token() }}"}  ,
         type: "POST", 
         success: function(output){ 
-            alert(output);
+        	
+            var html="<div id=\"comment-item\"><p>" + output.content + "</p><p>"
+            			+ output.updated_at + "</p>";
+            $('#comments').append(html);
         } 
     }); 
 }
+
+$(document).ready(function(){
+	
+	
+});
+
 </script>
 @stop
 
@@ -38,8 +45,6 @@ function addComment(){
 
 
 
-
-	
 	<div class="row js-trick-container">
 	<div id="image_container">
 		<div><img src="{{ URL::asset('img/temp/'.$image->image_path) }}"></div>
@@ -47,9 +52,21 @@ function addComment(){
 	</div>
 	</div>
 	
+	<div class="comment-load-image"  id="comments">
+		@foreach ($comments as $comment)
+		<div id="comment-item">
+		<p> {{$comment->content}}</p>
+		<p> {{$comment->auther_id}}</p>
+		<p> {{$comment->updated_at}} </p>
+		</div>
+		@endforeach
+		
+	</div>
+	
 	<div class="comment-form-image">
 		<input type="text" id="comment_text" placeholder="add some comment...">
 		<input type="button" value="comment" onclick="addComment()">	
+		
 	</div>
 	
 </div>

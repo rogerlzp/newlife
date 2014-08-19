@@ -5,6 +5,8 @@ use Tricks\Repositories\BoardRepositoryInterface;
 use Tricks\Repositories\CategoryRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
 
 use Illuminate\Support\Facades\Log;
 use Tricks\Image;
@@ -36,18 +38,26 @@ class CommentController extends BaseController {
 	public function postComment()
 	{
 		Log::info("CommentController.postComment");
-		$commentableId = Input::get('image_id');
-		Log::info(Input::get('conent'));
-
+		$imageId = Input::get('image_id');
+		$boardId = Input::get('board_id');
+		Log::info('imageId: '.$imageId);
+		if($imageId) {
+			$commentable_type = 'Tricks\\Image';
+		} 
 	
 		$data = array(
-				'commentable_type' => 'Image',
-				'commentable_id' => $commentableId,
+				'commentable_type' => $commentable_type,
+				'commentable_id' => $imageId,
 				'content' => Input::get('content'),
 				'user_id' => Auth::user()->id,
 		);
+		Log::info('commentable_type: '.$commentable_type);
 		
-		$this->comment->create($data);
+		$comment = $this->comment->create($data);
+		Log::info('postComment '. $comment);
+		
+		return $comment;
+
 		
 	}
 	

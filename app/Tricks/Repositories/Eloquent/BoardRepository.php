@@ -27,7 +27,6 @@ class BoardRepository extends AbstractRepository implements BoardRepositoryInter
 		$board = $this->getNew();
 	
 		$board->board_name        = e($data['board_name']);
-		$board->description = $data['description'];
 		$board->user_id     = $data['user_id'];
 		$board->save();
 		

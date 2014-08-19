@@ -21,12 +21,20 @@ class CommentRepository extends AbstractRepository implements CommentRepositoryI
 	 * Create a new board in the database.
 	 *
 	 * @param  array $data
-	 * @return \Tricks\Board
+	 * @return \Tricks\Comment
 	 */
 	public function create(array $data)
 	{
-		$this->model->fill($data);
-		$this->model->save();
+		$comment = $this->getNew();
+		
+		$comment->content    = e($data['content']);
+		$comment->commentable_type = $data['commentable_type'];
+		$comment->commentable_id = $data['commentable_id'];
+		$comment->user_id     = $data['user_id'];
+		$comment->save();
+		
+		return $comment;
+
 	}
 	
 	

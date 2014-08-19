@@ -55,7 +55,7 @@ class UserBoardController extends BaseController {
 	
 		$board = $this->board->create($data);
 	
-		return $this->redirectRoute('user.index');
+		return $board;
 	}
 	
 	/**

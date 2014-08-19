@@ -95,7 +95,7 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
     
     # Board creation route
     Route::get('user/board/new', [ 'as' => 'board.new', 'uses' => 'UserBoardController@getNew' ]);
-    Route::post('user/board/new', 'UserBoardController@postNew');
+    Route::post('user/board/new', ['as' => 'board.create', 'uses' => 'UserBoardController@postNew']);
     
     # Board list route
     Route::get('user/board/list', ['as' => 'user.board', 'uses' => 'UserBoardController@getList' ]);
@@ -131,5 +131,7 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
    Route::post('user/comment', ['as' => 'user.comment', 'uses' => 'CommentController@postComment']);
     
     
+   # Add Test route
+   Route::get('user/test1', ['as' => 'user.test1', 'uses' => 'TestController@testComment']);
     
 });

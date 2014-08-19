@@ -16,7 +16,7 @@ class CreateCommentTables extends Migration {
 		{
 			$table->engine = 'InnoDB';
 			$table->increments('id');
-			$table->integer('commentable_id');
+			$table->integer('commentable_id')->unsigned();
 			$table->string('commentable_type');
 			$table->integer('user_id')->unsigned();
 			$table->text('content');

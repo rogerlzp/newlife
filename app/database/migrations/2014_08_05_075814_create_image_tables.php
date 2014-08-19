@@ -22,10 +22,10 @@ class CreateImageTables extends Migration {
 			$table->string('image_name');
 			$table->string('image_path');
 			$table->string('description');
-			$table->integer('boards');
-			$table->integer('comments');
-			$table->integer('likes');
-			$table->integer('shares');
+			$table->integer('boards_counter');
+			$table->integer('comments_counter');
+			$table->integer('likes_counter');
+			$table->integer('shares_counter');
 			$table->enum('image_type', array('local', 'net'))->default('local');
 			
 			$table->foreign('user_id')->references('id')

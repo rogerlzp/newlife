@@ -21,10 +21,10 @@ class CreateBoardTables extends Migration {
 			$table->integer('user_id')->unsigned();
 			$table->string('board_name');
 			$table->string('description');
-			$table->integer('likes');
-			$table->integer('images');
-			$table->integer('shares');
-			$table->integer('comments');	
+			$table->integer('likes_counter');
+			$table->integer('images_counter');
+			$table->integer('shares_counter');
+			$table->integer('comments_counter');	
 			
 			$table->foreign('user_id')->references('id')
 				->on('users')->onUpdate('cascade')

@@ -13,7 +13,7 @@ class Comment extends Model
      */
     protected $table = 'comment';
     
-    protected $fillable = ['content', 'commentable_id', 'commentable_type', 'user_id'];
+  //  protected $fillable = ['content', 'commentable_id', 'commentable_type', 'user_id'];
 
     /**
      * Query the tricks that belong to the category.

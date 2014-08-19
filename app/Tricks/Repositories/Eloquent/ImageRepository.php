@@ -112,7 +112,11 @@ class ImageRepository extends AbstractRepository implements ImageRepositoryInter
 	public function findById($id)
 	{
 		$image = $this->model->whereId($id)->first();
+		$comments = $image->comments;
+		Log::info("findById");
 
+		Log::info($comments);
+		
 		return $image;
 	}
 

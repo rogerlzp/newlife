@@ -3,7 +3,6 @@
 class BoardForm extends AbstractForm {
 	
 	protected $rules = [
-	'board_name'        => 'required',
-	'description' => 'required|min:4'
+	'board_name'        => 'required'
 	];
 }

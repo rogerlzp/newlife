@@ -72,8 +72,12 @@ class ImageController extends BaseController {
 	 */
 	
 	public function getSingle($id) {
+
 		$image = $this->image->findById($id);
-		return  $this->view('image.single_show', compact('image'));
+		$comments = $image->comments;
+		Log::info('getSingle comments: '.$comments);
+		
+		return  $this->view('image.single_show', compact('image', 'comments'));
 	}
 	
 
