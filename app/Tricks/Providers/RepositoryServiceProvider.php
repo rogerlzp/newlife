@@ -60,5 +60,9 @@ class RepositoryServiceProvider extends ServiceProvider
         		'Tricks\Repositories\Eloquent\CommentRepository'
         );
         
+        $this->app->bind(
+        		'Tricks\Repositories\LikeRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\LikeRepository'
+        );
     }
 }

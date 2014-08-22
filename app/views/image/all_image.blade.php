@@ -1,6 +1,5 @@
 
-<link
-	rel="stylesheet" href="{{ URL::asset('css/mysite.css') }}">
+
 <link
 	rel="stylesheet" href="{{ URL::asset('css/jquery-ui-1.11.1.css') }}">
 
@@ -13,7 +12,7 @@
 	src="{{ asset('js/jquery.jscroll.min.js') }}"></script>
 <script
 	src="{{ asset('js/jquery.infinitescroll.min.js') }}"></script>
-	
+
 <script
 	src="{{ asset('js/jquery-ui-1.11.1.js') }}"></script>
 
@@ -26,8 +25,6 @@ jQuery(document).ready( function($) {
 			  itemSelector: '#image_wrapper',
 		        columnWidth : 240 
 			  });
-
-	
 		});
 
 	  $('#image_container').infinitescroll({
@@ -56,12 +53,15 @@ jQuery(document).ready( function($) {
 	    $('#image_wrapper').each(function(){
 	        var thisPin = $(this);
 	        thisPin.find('.editable').hide();
+	        thisPin.find('.like').hide();
 	        thisPin.off('hover');
 	        thisPin.hover(function() {
 	            thisPin.find('.editable').stop(true, true).fadeIn(300);
+	            thisPin.find('.like').stop(true, true).fadeIn(300);
  
 	        }, function() {
 	            thisPin.find('.editable').stop(true, false).fadeOut(300);
+	            thisPin.find('.like').stop(true, false).fadeOut(300);
 	        });
 	    });
 	      
@@ -113,7 +113,34 @@ function pinImage(board_id, image_id) {
 	
 }
 
+function addLike(image_id, object){		
+	if(object.value=="like") {
+		alert("like");
+	$.ajax({ 
+        url: "{{URL::route('user.like')}}",
+        dataType: 'json', 
+        data: {'image_id':image_id, _token: "{{ csrf_token() }}"} ,
+        type: "POST", 
+        success: function(output){ 
+        	object.value="dislike";
+        }
+	});
+	} else {
+		alert("dislike");
+		$.ajax({ 
+	        url: "{{URL::route('user.dislike')}}",
+	        dataType: 'json', 
+	        data: {'image_id':image_id, _token: "{{ csrf_token() }}"} ,
+	        type: "POST", 
+	        success: function(output){ 
+	        	object.value="like";
+	        }
+		});
 
+	}
+}
+        	
+        	 
 function addPinTest(image_id, image_path){	
 	
 	$.ajax({ 
@@ -161,33 +188,37 @@ function addPinTest(image_id, image_path){
 <div class="content-box">
 	<div id="image_container">
 		<div id="list">
-			
-				
-			@if ( Auth::check() )
-			
-		     @foreach($images as $image)
-			    <div id="image_wrapper">
-			    <a href="{{$image->id}}">
-			    <img class="item" src="{{ URL::asset('img/temp/'.$image->image_path) }}">
-				</a>	
-			<input type="button" class="editable" value="pin" hidden="true" onclick="addPinTest({{$image->id}},'{{$image->image_path}}' )"/>
-			    </div>
-		     @endforeach
-		      @else
-		   
-		    		
 
-		        @foreach($images as $image)
-			    <div id="image_wrapper">
-			    <a href="{{$image->id}}">
-			    <img class="item" src="{{ URL::asset('img/temp/'.$image->image_path) }}">
-                 <a href="{{$image->id}}">
-			  
-			<input type="button" class="editable" value="pin" hidden="true" onclick="login()" />
-		
-			    </div>
-		    	@endforeach
-		    @endif
+			@if ( Auth::check() ) 
+			@foreach($images as $image)
+			<div id="image_wrapper">
+				<a href="{{$image->id}}"> <img class="item"
+					src="{{ URL::asset('img/temp/'.$image->image_path) }}">
+				</a>
+				<div>
+					@if ( $image->likedByUser(Auth::user()) == 1 ) <input type="button"
+						class="like" value="dislike" hidden="true"
+						onclick="addLike({{$image->id}}, this)" /> @else <input
+						type="button" class="like" value="like" hidden="true"
+						onclick="addLike({{$image->id}}, this)" /> @endif <input
+						type="button" class="editable" value="pin" hidden="true"
+						onclick="addPinTest({{$image->id}},'{{$image->image_path}}' )" />
+
+					<p class="likecounter">likes("{{$image->likedcounter()}}")</p>
+				</div>
+
+			</div>
+			@endforeach 
+			@else @foreach($images as $image)
+			<div id="image_wrapper">
+				<a href="{{$image->id}}"> <img class="item"
+					src="{{ URL::asset('img/temp/'.$image->image_path) }}"> <a
+					href="{{$image->id}}"> <input type="button" class="editable"
+						value="pin" hidden="true" onclick="login()" />
+			
+			</div>
+			@endforeach 
+			@endif
 		</div>
 
 
@@ -200,29 +231,23 @@ function addPinTest(image_id, image_path){
 	</div>
 
 
-	<div id="dialog-message" title="add to  board">
+	<div id="dialog-message" title="add to  board" hidden="true">
 		<div class="dialog-field">
-			<label for="board">pick a board:</label>
-			<select id="boards"></select>
+			<label for="board">pick a board:</label> <select id="boards"></select>
 			<div class="ui-helper-clearfix"></div>
 		</div>
-		
+
 		<div class="description" id="add_board">
 			<input type="text" placeholder="add some desc">
 		</div>
-		
+
 		<div class="image-preview">
-		<img id="image-preview">
+			<img id="image-preview">
 		</div>
 
 	</div>
-   
 
 
-	<div class="col-lg-12">
-		<div class="alert alert-danger">{{ trans('tricks.no_tricks_found') }}
-		</div>
-	</div>
 
 </div>
 

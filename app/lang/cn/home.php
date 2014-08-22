@@ -36,14 +36,10 @@ return array(
 	'twitter_text' => 'Tips and Tricks for @laravelphp from @laraveltricks #php #dev #tips',
 	'share_facebook' => 'Share on Facebook',
 	'facebook_text' => 'Useful Tips and Tricks for Laravel PHP framework',
-	'about_what_is_this' => '<h2>What is this</h2>
-		<p>Laravel Tricks was created to help <a href="http://laravel.com" target="_blank">Laravel</a> community find and share interesting ways of using <a href="http://laravel.com" target="_blank">Laravel</a> framework</p>
-
-		<p>The idea is simple: When you work with Laravel long enough you find some cool ways of using it, and to other people they might seem as &quot;tricks&quot; so we thought to create a centralized place for all Laravel users to share those findings.</p>',
-	'about_who' => '<h2>Who?</h2>
-		<p>Laravel Tricks website was created by <a target="_blank" href="http://twitter.com/stidges">Stidges</a> and <a target="_blank" href="http://twitter.com/msurguy">Maks Surguy</a>  in November 2013</p>
-
-		<h3>Want the source?</h3>
-		The source of this website is available on <a target="_blank" href="https://github.com/CodepadME/laravel-tricks" title="Get the source of this site">Github</a>.'
+	'about_what_is_this' => '<h2>我们是谁</h2>
+		<p>寒舍网站是面向设计师，家具厂商和消费的接触平台</p>',
+	'about_who' => '<h2>我们的目标</h2>
+		<p>我们的理念是让设计温暖您的生活</p>
+		<h3></h3>'
 );
 

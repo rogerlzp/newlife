@@ -2,8 +2,26 @@
 
 use Tricks\Image;
 use McCool\LaravelAutoPresenter\BasePresenter;
+use Illuminate\Support\Facades\Log;
 
 class ImagePresenter extends BasePresenter {
+	
+	/**
+	 * Cache for whether the user has liked this trick.
+	 *
+	 * @var bool
+	 */
+	protected $likedByUser = null;
+	
+	
+	/**
+	 * Cache for the image liked number
+	 *
+	 * @var bool
+	 */
+	protected $likedCounter = null;
+	
+	
 	
 	public function __construct(Image $image)
 	{
@@ -11,5 +29,55 @@ class ImagePresenter extends BasePresenter {
 	}
 	
 	
+	/**
+	 * Returns whether the given user has liked this trick.
+	 *
+	 * @param  \Tricks\User $user
+	 * @return bool
+	 */
+	public function likedByUser($user)
+	{
+		if (is_null($user)) {
+			return false;
+		}
+	
+		if (is_null($this->likedByUser)) {
+			$this->likedByUser = $this->resource
+			->likes()
+			->where('user_id', $user->id)
+			->exists();
+		}
+	
+		return $this->likedByUser;
+	}
+	
+	/**
+	 * Returns whether the given user has liked this trick.
+	 *
+	 * @param  \Tricks\User $user
+	 * @return bool
+	 */
+	public function likedCounter()
+	{
+		Log::info("likedCounter");
+		if (is_null($this->likedCounter)) {
+			if(count($this->resource->likes()->get()->first()) != 0) {
+				$this->likedCounter = count($this->resource->likes()->get()->first());
+			}
+			/*if(is_empty($this->resource->likes()->get())) {
+				$this->$likedCounter = count($this->resource->likes()->get());
+			}
+			else {
+				$this->$likedCounter = 0;
+			}
+			*/
+			//$this->$likedCounter = count($this->resource->likes()->get()->first());
+		}
+	
+		return $this->likedCounter;
+	}
+
+	
+
 }
 

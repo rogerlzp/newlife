@@ -4,24 +4,52 @@
 	margin: 0 auto;
 }
 
-#list {
-	width: 103.125%; /* 990px */
-	overflow: hidden;
-	margin-left: -1.562%; /* 15px */
-	margin-bottom: -1.875em; /* 30px */
-}
-
 .item {
 	width: 100%; /* 300px */
 	float: left;
-	margin: 0 1.515% 1.075em; /* 15px 30px */
-	height:100%;
+/*	margin: 0 1.515% 1.075em; /* 15px 30px */
+	position:relative;
+	border-bottom-width: 40px;
+	height:200px;
 }
 
 #image_wrapper {
-	width: 20.303%; /* 300px */
+	width: 20%; /* 300px */
+	float: left;
+	/*margin: 0 1.515% 1.075em; /* 15px 30px */
+	margin: 0 1.515% 1.075em;
+}
+
+.likecounter {
+	width: 10%; /* 300px */
 	float: left;
 	margin: 0 1.515% 1.075em; /* 15px 30px */
+	position:relative;
+	bottom:0;
+	height:10%;
+}
+
+#image_wrapper  .likecounter {
+    background: rgba(255, 255, 255, 0.4);
+    background-image: url("add.jpg");
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+    position: absolute;
+    bottom: 0;
+    color: red;
+}
+
+
+ .likecounter .borderable {
+    background: rgba(0, 0, 0, 0.8);
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 8px;
+    display: inline-block;
 }
 
 
@@ -38,8 +66,35 @@
     color: white;
 }
 
+#image_wrapper .like {
+    background: rgba(255, 255, 255, 0.4);
+    background-image: url("like.jpg");
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+    position: absolute;
+    right: 50px;
+    top: 7px;
+    color: white;
+}
+
 #image_wrapper:hover .editable {
     display: block;
+}
+
+#image_wrapper:hover .like {
+    display: block;
+}
+
+#image_wrapper .like .borderable {
+    background: rgba(0, 0, 0, 0.8);
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 8px;
+    display: inline-block;
 }
 
 #image_wrapper .editable .borderable {

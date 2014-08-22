@@ -25,5 +25,12 @@ class Image extends Model {
 		return $this->morphMany('Tricks\Comment', 'commentable');
 	}
 	
+	/**
+	 * Relationship with Comment table
+	 */
+	public function likes() {
+		return $this->morphMany('Tricks\Like', 'liketable');
+	}
+	
 	
 }

@@ -39,8 +39,6 @@
                         </div>
                     {{ Form::close() }}
 
-                    <p class="text-center" style="margin-top:10px;">OR</p>
-                    <a class="btn btn-default btn-block btn-login-github" href="{{url('login/github')}}"><i class="fa fa-github"></i> {{ trans('home.login_with_github') }}</a>
                     <ul class="nav nav-list">
                         <li class="text-center"><a href="{{ url('password/remind') }}">{{ trans('home.forgot_your_password') }}</a></li>
                         <li class="text-center"><a href="{{ url('register') }}">{{ trans('home.do_not_have_account_yet') }}</a></li>

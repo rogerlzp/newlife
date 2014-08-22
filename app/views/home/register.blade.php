@@ -45,8 +45,6 @@
                         </div>
                     {{ Form::close() }}
 
-                    <p class="text-center" style="margin-top:10px;">{{ trans('home.or') }}</p>
-                    <a class="btn btn-default btn-block btn-login-github" href="{{url('login/github')}}"><i class="fa fa-github"></i> {{ trans('home.register_with_github') }}</a>
                     <ul class="nav nav-list">
                         <li class="text-center"><a href="{{ url('login') }}">{{ trans('home.already_have_an_account') }}</a></li>
                     </ul>

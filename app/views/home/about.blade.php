@@ -14,7 +14,7 @@
 					{{ trans('home.about_who') }}
 				</div>
 			</div>
-			<div class="row">
+			<div class="row" hidden="true">
 				<div class="col-md-12 text-center">
 					<h2>{{ trans('home.share_title') }}</h2>
 					<p>

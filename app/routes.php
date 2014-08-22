@@ -129,6 +129,11 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
     
     # Add Comment route
    Route::post('user/comment', ['as' => 'user.comment', 'uses' => 'CommentController@postComment']);
+   
+   # Add Like route
+   Route::post('user/like', ['as' => 'user.like', 'uses' => 'LikeController@postLike']);
+   # Add DisLike route
+   Route::post('user/dislike', ['as' => 'user.dislike', 'uses' => 'LikeController@postDislike']);
     
     
    # Add Test route
