@@ -235,7 +235,7 @@ function getImage() {
 		</div>
 	</div>
 	
-		<div id="dialog-add-file" title="add a file from internet">
+		<div id="dialog-add-file" title="add a file from internet" hidden="true">
 		<div class="description" id="add_board">
 			<form id="image_form">
 			<input type="text" placeholder="http://" id="image_file_url" class="url" value="11" >
@@ -251,3 +251,4 @@ function getImage() {
 	
 </div>
 @stop
+tn
