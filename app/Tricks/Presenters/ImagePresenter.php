@@ -63,21 +63,25 @@ class ImagePresenter extends BasePresenter {
 		if (is_null($this->likedCounter)) {
 			if(count($this->resource->likes()->get()->first()) != 0) {
 				$this->likedCounter = count($this->resource->likes()->get()->first());
+			} else {
+				$this->likedCounter = 0;
 			}
-			/*if(is_empty($this->resource->likes()->get())) {
-				$this->$likedCounter = count($this->resource->likes()->get());
-			}
-			else {
-				$this->$likedCounter = 0;
-			}
-			*/
-			//$this->$likedCounter = count($this->resource->likes()->get()->first());
+			
 		}
 	
 		return $this->likedCounter;
 	}
 
 	
+	/**
+	 * Get all the boards for this image.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection|\Tricks\Category[]
+	 */
+	public function allBoards()
+	{
+		return $this->resource->boards;
+	}
 
 }
 

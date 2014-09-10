@@ -35,6 +35,18 @@ class BoardRepository extends AbstractRepository implements BoardRepositoryInter
 	
 	
 	/**
+	 * Create a new board in the database.
+	 *
+	 * @param  array $data
+	 * @return \Tricks\Board
+	 */
+	public function findById($id)
+	{
+		return $this->model->whereId($id)->first();
+
+	}
+	
+	/**
 	 * Get the board creation form service.
 	 *
 	 * @return \Tricks\Services\Forms\BoardForm
@@ -79,6 +91,21 @@ class BoardRepository extends AbstractRepository implements BoardRepositoryInter
 		$boards = $user->boards()->orderBy('created_at', 'DESC')->lists('board_name', 'id');
 		return $boards;
 	}
+	
+
+	
+	/**
+	 * Find all the boards for the given user.
+	 *
+	 * @param  \Tricks\User $user
+	 */
+	public function findAllForUser2(User $user)
+	{
+		Log::info($user->username);
+		$boards = $user->boards()->orderBy('created_at', 'DESC')->paginate(10);
+		return $boards;
+	}
+	
 	
 	/**
 	 * Find all the boards for the given user.

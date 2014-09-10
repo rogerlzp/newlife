@@ -115,7 +115,6 @@ function pinImage(board_id, image_id) {
 
 function addLike(image_id, object){		
 	if(object.value=="like") {
-		alert("like");
 	$.ajax({ 
         url: "{{URL::route('user.like')}}",
         dataType: 'json', 
@@ -126,7 +125,6 @@ function addLike(image_id, object){
         }
 	});
 	} else {
-		alert("dislike");
 		$.ajax({ 
 	        url: "{{URL::route('user.dislike')}}",
 	        dataType: 'json', 
@@ -191,7 +189,8 @@ function addPinTest(image_id, image_path){
 
 			@if ( Auth::check() ) 
 			@foreach($images as $image)
-			<div id="image_wrapper">
+		<div id="image_wrapper" >
+			<div>
 				<a href="{{$image->id}}"> <img class="item"
 					src="{{ URL::asset('img/temp/'.$image->image_path) }}">
 				</a>
@@ -203,61 +202,65 @@ function addPinTest(image_id, image_path){
 						onclick="addLike({{$image->id}}, this)" /> @endif <input
 						type="button" class="editable" value="pin" hidden="true"
 						onclick="addPinTest({{$image->id}},'{{$image->image_path}}' )" />
-
-					<p class="likecounter">likes("{{$image->likedcounter()}}")</p>
 				</div>
-
+				<div >by <b>
+				<a href="{{ route('user.profile', $image->user->username) }}">
+				{{ $image->user->username }}</a></b></div>
+				<div class="trick-card-stats clearfix">
+					<div>likes("{{$image->likedcounter()}}")</div>
+					</div>
+				
 			</div>
-			@endforeach 
-			@else @foreach($images as $image)
-			<div id="image_wrapper">
-				<a href="{{$image->id}}"> <img class="item"
-					src="{{ URL::asset('img/temp/'.$image->image_path) }}"> <a
-					href="{{$image->id}}"> <input type="button" class="editable"
-						value="pin" hidden="true" onclick="login()" />
-			
 			</div>
-			@endforeach 
-			@endif
+		@endforeach 
+		@else 
+		@foreach($images as $image)
+		<div id="image_wrapper">
+			<a href="{{$image->id}}"> <img class="item"
+				src="{{ URL::asset('img/temp/'.$image->image_path) }}"> <a
+				href="{{$image->id}}"> <input type="button" class="editable"
+					value="pin" hidden="true" onclick="login()" />
+						<div >by <b>
+				<a href="{{ route('user.profile', $image->user->username) }}">
+				{{ $image->user->username }}</a></b></div>
+				<div class="trick-card-stats clearfix">
+					<div>likes("{{$image->likedcounter()}}")</div>
+					</div>
+		
 		</div>
-
-
-
-
-
-		<div class="col-span-12">
-			<div class="paginate text-center"></div>
-		</div>
+		@endforeach 
+		@endif
 	</div>
 
 
-	<div id="dialog-message" title="add to  board" hidden="true">
-		<div class="dialog-field">
-			<label for="board">pick a board:</label> <select id="boards"></select>
-			<div class="ui-helper-clearfix"></div>
-		</div>
 
-		<div class="description" id="add_board">
-			<input type="text" placeholder="add some desc">
-		</div>
 
-		<div class="image-preview">
-			<img id="image-preview">
-		</div>
 
+	<div class="col-span-12">
+		<div class="paginate text-center"></div>
 	</div>
+</div>
+
+
+<div id="dialog-message" title="add to  board" hidden="true">
+	<div class="dialog-field">
+		<label for="board">pick a board:</label> <select id="boards"></select>
+		<div class="ui-helper-clearfix"></div>
+	</div>
+
+	<div class="description" id="add_board">
+		<input type="text" placeholder="add some desc">
+	</div>
+
+	<div class="image-preview">
+		<img id="image-preview">
+	</div>
+
+</div>
 
 
 
 </div>
 
 
-@section('scripts') 
-@if(count($images))
-<script
-	src="{{ asset('js/vendor/masonry.pkgd.min.js') }}"></script>
-<script>
-$(function(){$container=$(".js-trick-container");$container.masonry({gutter:0,itemSelector:".trick-card",columnWidth:".trick-card"});$(".js-goto-trick a").click(function(e){e.stopPropagation()});$(".js-goto-trick").click(function(e){e.preventDefault();var t="{{ route('tricks.show') }}";var n=$(this).data("slug");window.location=t+"/"+n})})
-		</script>
-@endif 
-@stop
+

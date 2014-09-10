@@ -2,7 +2,6 @@
 
 namespace Controllers\Admin;
 
-use Controllers\BaseController;
 use Tricks\Repositories\UserRepositoryInterface;
 
 class UsersController extends BaseController

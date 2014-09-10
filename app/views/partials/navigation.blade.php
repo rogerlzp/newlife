@@ -43,6 +43,7 @@
 				  	<li class="{{( Request::segment('1') == 'user' && Request::segment('2') == '' ? 'active' : false )}}"><a href="{{ url('user')}}">{{ trans('partials.my_tricks') }}</a></li>
 					    <li class="{{( Request::segment('2') == 'favorites' ? 'active' : false )}}"><a href="{{ url('user/favorites')}}">{{ trans('partials.my_favorites') }}</a></li>
 					    <li class="{{( Request::segment('2') == 'settings' ? 'active' : false )}}"><a href="{{ url('user/settings')}}">{{ trans('partials.settings') }}</a></li>
+					    <li class="{{( Request::segment('2') == 'settings' ? 'active' : false )}}"><a href="{{ url('user/profile')}}">{{ trans('partials.images') }}</a></li>
 					    <li><a href="{{ url('logout')}}">{{ trans('partials.logout') }}</a></li>
 					  </ul>
 					</li>

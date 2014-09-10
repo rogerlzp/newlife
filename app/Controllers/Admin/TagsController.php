@@ -2,7 +2,6 @@
 
 namespace Controllers\Admin;
 
-use Controllers\BaseController;
 use Tricks\Repositories\TagRepositoryInterface;
 
 class TagsController extends BaseController

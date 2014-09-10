@@ -40,7 +40,7 @@ return array(
 			),
 		array(
 			'label' => '图片',
-			'route' => 'image.first',
+			'route' => 'image.show',
 			'active' => array('image*'),
 				// 'logged_in' => true
 		),

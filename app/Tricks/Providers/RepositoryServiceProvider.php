@@ -64,5 +64,17 @@ class RepositoryServiceProvider extends ServiceProvider
         		'Tricks\Repositories\LikeRepositoryInterface',
         		'Tricks\Repositories\Eloquent\LikeRepository'
         );
+        $this->app->bind(
+        		'Tricks\Repositories\FollowRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\FollowRepository'
+        );
+        $this->app->bind(
+        		'Tricks\Repositories\ProductRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\ProductRepository'
+        );
+        $this->app->bind(
+        		'Tricks\Repositories\Category2RepositoryInterface',
+        		'Tricks\Repositories\Eloquent\Category2Repository'
+        );
     }
 }

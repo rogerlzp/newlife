@@ -33,4 +33,9 @@ class Image extends Model {
 	}
 	
 	
+	public function boards() {
+		return $this->belongsToMany('Tricks\Board', 'image_board');
+	}
+	
+	
 }

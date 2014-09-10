@@ -2,7 +2,6 @@
 
 namespace Controllers\Admin;
 
-use Controllers\BaseController;
 use Illuminate\Support\Facades\Input;
 use Tricks\Repositories\CategoryRepositoryInterface;
 

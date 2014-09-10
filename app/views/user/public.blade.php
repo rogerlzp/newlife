@@ -1,5 +1,41 @@
 @section('title', $user->fullName)
 
+@section('scripts')
+<script>
+$(document).ready(function(){
+	
+
+});
+
+function toggleFollow(){		
+	if($('#follow').text().trim() === "follow") {
+	$.ajax({ 
+        url: "{{URL::route('user.follow')}}",
+        dataType: 'json', 
+        data: {'follow_id': "{{$user->id}}", _token: "{{ csrf_token() }}"} ,
+        type: "POST", 
+        success: function(output){ 
+            $('#follow').text("unfollow");
+        }
+	});
+	} else {
+		$.ajax({ 
+	        url: "{{URL::route('user.unfollow')}}",
+	        dataType: 'json', 
+	        data: {'follow_id': "{{$user->id}}", _token: "{{ csrf_token() }}"} ,
+	        type: "POST", 
+	        success: function(output){ 
+	        	 $('#follow').text("follow");
+	        }
+		});
+
+	}
+}
+
+</script>
+
+@stop
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -17,15 +53,33 @@
                             <b>{{ trans('user.joined') }}</b> {{ $user->created_at->diffForHumans() }}
                         </div>
                     </div>
+               
                 </div>
+              <div class="text-muted">
+                      <b>followers</b>
+                </div>
+                  <div class="text-muted">
+                            <b>followings:</b>
+                  </div>
+                  
+                  @if(Auth::user()->follows) 
+                  <p>follows</p>
+                  @else
+                  <p>not follow</p>
+                  @endif
+                  
+                  <div class="btn btn-primary" onclick="toggleFollow()">
+                            <p id="follow">follow</b>
+                  </div>
+                        
                 <table>
                     <tr>
                         <th>{{ trans('user.total_tricks') }}</th>
-                        <td>{{ count($tricks) }}</td>
+                        <td>{{ count($boards) }}</td>
                     </tr>
                     <tr>
                         <th width="140">{{ trans('user.last_trick') }}</th>
-                        <td>{{ $user->lastActivity($tricks) }}</td>
+                       
                     </tr>
                 </table>
             </div>
@@ -38,7 +92,7 @@
         </div>
     </div>
 
-    @include('tricks.grid', [ 'tricks' => $tricks ])
+    @include('board.grid', [ 'boards' => $boards ])
 </div>
 
 

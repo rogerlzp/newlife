@@ -57,10 +57,32 @@ class AuthController extends BaseController
         }
 
         if (Auth::attempt($credentials, $remember)) {
-            return $this->redirectIntended(route('user.index'));
+            return $this->redirectIntended(route('image.show'));
         }
 
         return $this->redirectBack([ 'login_errors' => true ]);
+    }
+    
+    /**
+     * Post login form.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postAdminLogin()
+    {
+    	$credentials = Input::only([ 'username', 'password' ]);
+    	$remember    = Input::get('remember', false);
+    
+    	if (str_contains($credentials['username'], '@')) {
+    		$credentials['email'] = $credentials['username'];
+    		unset($credentials['username']);
+    	}
+    
+    	if (Auth::attempt($credentials, $remember)) {
+    		return $this->redirectIntended(route('admin.show'));
+    	}
+    
+    	return $this->redirectBack([ 'login_errors' => true ]);
     }
 
     /**

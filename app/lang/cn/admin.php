@@ -38,5 +38,6 @@ return array(
 	'tricks' => 'Tricks',
 	'date_registered' => '注册日期',
 	'github_profile' => 'Github Profile?',
+	'add_new_product' => '新增产品',
     
 );

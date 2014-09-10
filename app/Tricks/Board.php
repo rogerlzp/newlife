@@ -23,7 +23,16 @@ class Board extends Model {
 	 * Relationship with Comment table
 	 */
 	public function comments() {
-		return $this->morphMany('Comment', 'commentable');
+		return $this->morphMany('Tricks\Comment', 'commentable');
+	}
+	
+	/** images
+	 * 
+	 * 
+	 */
+	
+	public function images() {
+		return $this->belongsToMany('Tricks\Image', 'image_board');	
 	}
 	
 	

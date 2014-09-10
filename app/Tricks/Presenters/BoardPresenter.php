@@ -10,6 +10,16 @@ class BoardPresenter extends BasePresenter {
 		$this->resource = $board;
 	}
 	
+	/**
+	 * Get all the boards for this image.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Collection|\Tricks\Category[]
+	 */
+	public function allImages()
+	{
+		return $this->resource->images;
+	}
+	
 	
 }
 

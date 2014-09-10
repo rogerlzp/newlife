@@ -33,15 +33,15 @@ class BoardController extends BaseController {
 			return $this->redirectRoute('home');
 		}
 	
-		$board = $this->board->find($id);
+		$board = $this->board->findById($id);
 	
 		if (is_null($board)) {
 			return $this->redirectRoute('home');
 		}
 	
-		Event::fire('board.view', $board);
+	//	Event::fire('board.view', $board);
 	
-		$this->view('borad.single', compact('borad''));
+		$this->view('board.single', compact('board'));
 		
 	}
 	

@@ -183,4 +183,12 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     {
         return app('Tricks\Services\Forms\SettingsForm');
     }
+    
+
+    public function doesFollowUser($id)
+    {
+    	return Auth::user()->follows->where('follow_id', '=', $id);
+    }
+    
+    
 }

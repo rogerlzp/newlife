@@ -1,6 +1,6 @@
 <?php
 # Route filters
-Route::when('admin/*', 'admin');
+//Route::when('admin/*', 'admin');
 Route::when('*', 'trick.view_throttle');
 
 # Route patterns
@@ -8,7 +8,7 @@ Route::pattern('tag_slug', '[a-z0-9\-]+');
 Route::pattern('trick_slug', '[a-z0-9\-]+');
 
 # Admin routes
-Route::group([ 'prefix' => 'admin', 'namespace' => 'Controllers\Admin' ], function () {
+Route::group(['prefix'=>'admin', 'namespace' => 'Controllers\Admin' ], function () {
     Route::controller('tags', 'TagsController', [
         'getIndex' => 'admin.tags.index',
         'getView'  => 'admin.tags.view'
@@ -18,9 +18,40 @@ Route::group([ 'prefix' => 'admin', 'namespace' => 'Controllers\Admin' ], functi
         'getIndex' => 'admin.categories.index',
         'getView'  => 'admin.categories.view'
     ]);
+    
+    Route::controller('product', 'ProductController', [
+    'getIndex' => 'admin.product.index',
+    'getView'  => 'admin.product.view'
+    		]);
+    
+    
+    Route::controller('category2', 'Category2Controller', [
+    'getIndex' => 'admin.category2.index',
+    'getView'  => 'admin.category2.view'
+    		]);
+    
+  
+    Route::controller('login', 'AdminController', [
+    'getIndex' => 'admin.admin.index',
+    'getView'  => 'admin.admin.view'
+    		]);
 
+    Route::get('category2',  ['as'=>'admin.category2.index', 'uses' => 'Category2Controller@getIndex']);
+    
+    Route::get('product',  ['as'=>'admin.product.create', 'uses' => 'ProductController@getCreate']);
+    Route::post('product', 'ProductController@postCreate');
+
+
+    Route::get('test5', [ 'as' => 'admin.show', 'uses' => 'AdminController@getIndex' ]);    
     Route::controller('users', 'UsersController');
+    
+
 });
+
+	Route::group(['namespace' => 'Controllers\Admin' ], function () {
+		
+		Route::get('test3/', [ 'as' => 'admin.login', 'uses' => 'AdminController@getLogin' ]);
+	});
 
 
 
@@ -41,6 +72,14 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
         'as'   => 'tricks.browse.category',
         'uses' => 'BrowseController@getBrowseCategory'
     ]);
+    
+    # Browse routes
+    Route::get('categories2', [ 'as' => 'browse.categories2', 'uses' => 'BrowseController@getCategoryIndex']);
+    Route::get('categories2/{category_slug}', [
+    'as'   => 'tricks.browse.category',
+    'uses' => 'BrowseController@getBrowseCategory'
+    		]);
+    
     Route::get('tags', [ 'as' => 'browse.tags', 'uses' => 'BrowseController@getTagIndex' ]);
     Route::get('tags/{tag_slug}', [ 'as' => 'tricks.browse.tag', 'uses' => 'BrowseController@getBrowseTag' ]);
 
@@ -54,6 +93,10 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
     # Authentication and registration routes
     Route::get('login', [ 'as' => 'auth.login', 'uses' => 'AuthController@getLogin' ]);
     Route::post('login', 'AuthController@postLogin');
+    
+    Route::get('adminlogin', [ 'as' => 'auth.adminlogin', 'uses' => 'AuthController@getLogin' ]);
+    Route::post('adminlogin', 'AuthController@postAdminLogin');
+    
     Route::get('login/github', [ 'as' => 'auth.login.github', 'uses' => 'AuthController@getLoginWithGithub' ]);
     Route::get('register', [ 'as' => 'auth.register', 'uses' => 'AuthController@getRegister']);
     Route::post('register', 'AuthController@postRegister');
@@ -72,6 +115,7 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
     Route::get('user/favorites', [ 'as' => 'user.favorites', 'uses' => 'UserController@getFavorites' ]);
     Route::post('user/avatar', [ 'as' => 'user.avatar', 'uses' => 'UserController@postAvatar' ]);
     Route::get('user/image', [ 'as' => 'user.image', 'uses' => 'UserController@getImage' ]);
+    Route::get('user/profile', [ 'as' => 'user.profile', 'uses' => 'UserController@getProfile' ]);
 
     # Trick creation route
     Route::get('user/tricks/new', [ 'as' => 'tricks.new', 'uses' => 'UserTricksController@getNew' ]);
@@ -97,6 +141,9 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
     Route::get('user/board/new', [ 'as' => 'board.new', 'uses' => 'UserBoardController@getNew' ]);
     Route::post('user/board/new', ['as' => 'board.create', 'uses' => 'UserBoardController@postNew']);
     
+    # Board show route
+    Route::get('board/{id}', ['as' => 'board.show', 'uses' => 'BoardController@getShow']);
+    
     # Board list route
     Route::get('user/board/list', ['as' => 'user.board', 'uses' => 'UserBoardController@getList' ]);
     
@@ -116,7 +163,7 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
     Route::get('user/image/pin', [ 'as' => 'image.pin', 'uses' => 'UserImageController@postPin' ]);
     
     # Image list
-    Route::get('image/first', [ 'as' => 'image.first', 'uses' => 'ImageController@getIndex' ]);
+    Route::get('image/show', [ 'as' => 'image.show', 'uses' => 'ImageController@getIndex' ]);
 
     # Image id
     Route::get('image/{id}', [ 'as' => 'image.single', 'uses' => 'ImageController@getSingle' ]);
@@ -134,9 +181,15 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
    Route::post('user/like', ['as' => 'user.like', 'uses' => 'LikeController@postLike']);
    # Add DisLike route
    Route::post('user/dislike', ['as' => 'user.dislike', 'uses' => 'LikeController@postDislike']);
+   
+   # Follow  route
+   Route::post('user/follow', ['as' => 'user.follow', 'uses' => 'UserController@postFollow']);
+   # Unfollow route
+   Route::post('user/unfollow', ['as' => 'user.unfollow', 'uses' => 'UserController@postUnfollow']);
     
     
    # Add Test route
    Route::get('user/test1', ['as' => 'user.test1', 'uses' => 'TestController@testComment']);
+   Route::get('user/tfollow1', ['as' => 'user.test_follow', 'uses' => 'TestController@testUserFollow']);
     
 });

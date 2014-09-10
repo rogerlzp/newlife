@@ -4,6 +4,7 @@ namespace Tricks\Services\Navigation;
 
 use Illuminate\Auth\AuthManager;
 use Illuminate\Config\Repository;
+use Illuminate\Support\Facades\Log;
 
 class Builder
 {
@@ -62,6 +63,32 @@ class Builder
     }
 
     /**
+     * Build the HTML navigation from the given config key.
+     *
+     * @param  string $url
+     * @param  string $type
+     * @return string
+     */
+    public function make_admin($url, $type = 'menu')
+    {
+    	$menu      = $this->getNavigationConfig_Admin($type);
+    	$html      = '';
+    	$hasActive = false;
+    
+    	foreach ($menu as $item) {
+    		$isActive = false;
+    
+    		if (! $hasActive && $this->isActiveItem($item, $url)) {
+    			$isActive = $hasActive = true;
+    		}
+    
+    
+    		$html .= $this->getNavigationItem($item, $isActive);
+    	}
+    
+    	return $html;
+    }
+    /**
      * Load the navigation config for the given type.
      *
      * @param  string  $type
@@ -72,6 +99,17 @@ class Builder
         return $this->config->get('navigation.' . $type);
     }
 
+    /**
+     * Load the navigation config for the given type.
+     *
+     * @param  string  $type
+     * @return array
+     */
+    protected function getNavigationConfig_Admin($type)
+    {
+    	return $this->config->get('admin_nav.' . $type);
+    }
+    
     /**
      * Determine whether the given item is currently active.
      * @param  array   $item

@@ -178,15 +178,15 @@ class User extends Model implements UserInterface, RemindableInterface
 	 * 
 	 */
 	
-	public function follow() {
-		return $this->belongsToMany('User', 'user_follows', 'user_id', 'follow_id');
+	public function follows() {
+		return $this->hasMany('Tricks\Follow');
 	}
 	
 	/**
 	 * User followers relationship
 	 */
 	public function followers() {
-		return $this->belongsToMany('User', 'user_follows', 'follow_id', 'user_id');
+		return $this->hasMany('Tricks\Follow', 'follow_id');
 	}
 	
 	

@@ -12,6 +12,7 @@ use Tricks\Repositories\ImageRepositoryInterface;
 use Tricks\Repositories\ImageBoardRepositoryInterface;
 use Tricks\Repositories\BoardRepositoryInterface;
 use Tricks\Repositories\UserRepositoryInterface;
+use Tricks\Repositories\FollowRepositoryInterface;
 
 use Illuminate\Support\Facades\Log;
 
@@ -63,13 +64,21 @@ class UserController extends BaseController
     protected $user;
 
     /**
+     * Follow repository.
+     *
+     * @var \Tricks\Repositories\FollowRepositoryInterface
+     */
+    protected $follow;
+    
+    /**
      * Create a new UserController instance.
      *
      * @param \Tricks\Repositories\TrickRepositoryInterface  $tricks
      * @param \Tricks\Repositories\UserRepositoryInterface  $users
      */
     public function __construct(TrickRepositoryInterface $tricks, UserRepositoryInterface $users, 
-    		ImageBoardRepositoryInterface $image_board, BoardRepositoryInterface $boards, ImageRepositoryInterface $images)
+    		ImageBoardRepositoryInterface $image_board, BoardRepositoryInterface $boards, 
+    		ImageRepositoryInterface $images, FollowRepositoryInterface $follow)
     {
     	Log::info(' __construct in UserController');
         parent::__construct();
@@ -81,6 +90,7 @@ class UserController extends BaseController
         $this->users  = $users;
         $this->images  = $images;
         $this->boards = $boards;
+        $this->follow = $follow;
         $this->image_board = $image_board;
     }
 
@@ -110,6 +120,22 @@ class UserController extends BaseController
     	$this->view('user.image_profile', compact('images'));
     }
     
+    
+    
+    /**
+     * Show the user's profile page.
+     *
+     * @return \Response
+     */
+    public function getProfile()
+    {
+    //	$images = $this->images->findAllForUser($this->user, 10);
+    
+    	$boards = $this->boards->findAllForUser2($this->user);
+
+    	$this->view('user.profile2', compact('boards'));
+    	
+    }
     
     /**
      * Show the settings page.
@@ -185,8 +211,38 @@ class UserController extends BaseController
     public function getPublic($username)
     {
         $user   = $this->users->requireByUsername($username);
-        $tricks = $this->tricks->findAllForUser($user);
+        $boards = $this->boards->findAllForUser2($user);
 
-        $this->view('user.public', compact('user', 'tricks'));
+        $this->view('user.public', compact('user', 'boards'));
     }
+    
+    /**
+     * User follow the other user
+     * 
+     */
+    
+    public function postFollow() {
+    	$follow_id = Input::get('follow_id');
+    	
+         $users->doesFollowUser($follow_id);
+    	
+    	$user_id = Auth::user()->id;
+
+    	Log::info('postFollow');
+    	$this->follow->create(array('user_id'=>$user_id, 'follow_id'=> $follow_id));
+    	return Response::json('success', 200);	
+    }
+    
+    /**
+     * User unfollow the other user
+     *
+     */
+    
+    public function postUnfollow() {
+    	$user_id = Auth::user()->id;
+    	$follow_id = Input::get('follow_id');;
+    	$this->follow->deleteFollow($user_id, $follow_id);
+    	return Response::json('success', 200);
+    }
+    
 }
