@@ -19,8 +19,6 @@
 	    </div>
 	@endif
 
-
-
 	@include('image.all_image', [ 'images' => $images ])
 </div>
 @stop

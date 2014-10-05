@@ -24,6 +24,8 @@ class CreateProductTables extends Migration {
 			$table->boolean("enable")->default(1);
 			$table->integer("user_id")->unsigned();
 			
+			$table->integer("image_id")->unsigned();
+			
 			$table->text("short_description");
 			$table->text("long_description");
 			
@@ -33,6 +35,9 @@ class CreateProductTables extends Migration {
 			$table->foreign('user_id')->references('id')
 			->on('users')->onUpdate('cascade')
 			->onDelete('cascade');
+			
+			$table->foreign('image_id')->references('id')
+			->on('images');
 			
 		});
 	}

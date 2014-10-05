@@ -19,10 +19,26 @@ Route::group(['prefix'=>'admin', 'namespace' => 'Controllers\Admin' ], function 
         'getView'  => 'admin.categories.view'
     ]);
     
+    
+    Route::controller('attribute', 'AttributeController', [
+    'getIndex' => 'admin.attribute.index',
+    'getView'  => 'admin.attribute.view'
+    		]);
+    
     Route::controller('product', 'ProductController', [
     'getIndex' => 'admin.product.index',
     'getView'  => 'admin.product.view'
     		]);
+    
+    
+    Route::get('image', ['as'=>'admin.image.index', 'uses' => 'ImageController@getIndex'] );
+   // Route::get('image', ['as'=>'admin.image.view', 'uses' => 'ImageController@getView'] );
+    
+    Route::get('image/{id}', ['as'=>'admin.image.single', 'uses' => 'ImageController@getSingle'] );
+    
+    Route::get('image/tagadd', ['as'=>'admin.image.tag', 'uses' => 'ImageController@getTag'] );
+    Route::post('image/tagadd', ['as'=>'admin.image.tag', 'uses' => 'ImageController@postTag'] );
+    
     
     
     Route::controller('category2', 'Category2Controller', [
@@ -30,28 +46,28 @@ Route::group(['prefix'=>'admin', 'namespace' => 'Controllers\Admin' ], function 
     'getView'  => 'admin.category2.view'
     		]);
     
-  
-    Route::controller('login', 'AdminController', [
-    'getIndex' => 'admin.admin.index',
-    'getView'  => 'admin.admin.view'
-    		]);
+
 
     Route::get('category2',  ['as'=>'admin.category2.index', 'uses' => 'Category2Controller@getIndex']);
     
     Route::get('product',  ['as'=>'admin.product.create', 'uses' => 'ProductController@getCreate']);
     Route::post('product', 'ProductController@postCreate');
+    
+    Route::post('attribute/create',  ['as'=>'admin.attribute.create', 'uses' => 'AttributeController@postCreate']);
+    // upload product image
+    Route::post('product2',  ['as'=>'admin.product.updateImage', 'uses' => 'ProductController@postUpdateImage']);
 
-
+    // upload product image
+    Route::post('product3',  ['as'=>'admin.product.updateprice', 'uses' => 'ProductController@postUpdatePrice']);
+    
+    
     Route::get('test5', [ 'as' => 'admin.show', 'uses' => 'AdminController@getIndex' ]);    
     Route::controller('users', 'UsersController');
     
+    Route::get('fhadmin', [ 'as' => 'admin.login', 'uses' => 'AdminController@getLogin' ]);
 
 });
 
-	Route::group(['namespace' => 'Controllers\Admin' ], function () {
-		
-		Route::get('test3/', [ 'as' => 'admin.login', 'uses' => 'AdminController@getLogin' ]);
-	});
 
 
 
@@ -187,9 +203,29 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
    # Unfollow route
    Route::post('user/unfollow', ['as' => 'user.unfollow', 'uses' => 'UserController@postUnfollow']);
     
+
+   # Product list
+   Route::get('product/show', [ 'as' => 'product.show', 'uses' => 'ProductController@getIndex' ]);
+   
+   # Product id
+   Route::get('product/{id}', [ 'as' => 'product.single', 'uses' => 'ProductController@getSingle' ]);
     
    # Add Test route
    Route::get('user/test1', ['as' => 'user.test1', 'uses' => 'TestController@testComment']);
+   Route::get('user/test2', ['as' => 'user.test1', 'uses' => 'TestController@testProductInfo']);
    Route::get('user/tfollow1', ['as' => 'user.test_follow', 'uses' => 'TestController@testUserFollow']);
+   
+   
+   
+   # Cart index
+   Route::get('cart/show', [ 'as' => 'cart.show', 'uses' => 'CartController@getIndex' ]);
     
+   # Add product to cart
+   Route::post('cart/add', [ 'as' => 'cart.add', 'uses' => 'CartController@addToCart' ]);
+   
+   # order index
+   # Cart index
+   Route::get('cart/checkout', [ 'as' => 'checkout.index', 'uses' => 'OrderController@getIndex' ]);
+   
+   
 });

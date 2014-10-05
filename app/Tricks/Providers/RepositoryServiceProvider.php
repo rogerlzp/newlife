@@ -76,5 +76,32 @@ class RepositoryServiceProvider extends ServiceProvider
         		'Tricks\Repositories\Category2RepositoryInterface',
         		'Tricks\Repositories\Eloquent\Category2Repository'
         );
+        
+        $this->app->bind(
+        		'Tricks\Repositories\ProductPriceRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\ProductPriceRepository'
+        );
+        
+        $this->app->bind(
+        		'Tricks\Repositories\AttributeRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\AttributeRepository'
+        );
+        
+        
+        $this->app->bind(
+        		'Tricks\Repositories\ImageTagRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\ImageTagRepository'
+        );
+        
+
+        $this->app->bind(
+        		'Tricks\Repositories\CartItemRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\CartItemRepository'
+        );
+
+        $this->app->bind(
+        		'Tricks\Repositories\CartRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\CartRepository'
+        );
     }
 }

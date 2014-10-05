@@ -21,7 +21,8 @@ class CreateProductpriceTables extends Migration {
 			$table->float("price");
 			$table->float("original_price");
 			$table->dateTime('startDate');
-			$table->dateTime('endDate');			
+			$table->dateTime('endDate');
+			$table->timestamps();
 			
 			$table->foreign('product_id')->references('id')
 			->on('product')->onUpdate('cascade')

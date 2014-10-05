@@ -122,13 +122,13 @@ interface ProductRepositoryInterface
     public function create(array $data);
 
     /**
-     * Update the trick in the database.
+     * Update the product in the database.
      *
-     * @param  \Tricks\Trick $trick
+     * @param  $id
      * @param  array $data
-     * @return \Tricks\Trick
+     * @return \Tricks\Product
      */
-   // public function edit(Trick $trick, array $data);
+    public function edit($id, array $data);
 
     /**
      * Increment the view count on the given trick.

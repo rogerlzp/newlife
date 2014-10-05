@@ -18,6 +18,8 @@ class CreateAttributeTables extends Migration {
 			$table->increments("id")->unsigned();
 			
 			$table->string("name");
+			$table->string("value");
+			$table->timestamps();
 
 		});
 	}

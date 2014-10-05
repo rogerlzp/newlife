@@ -4,7 +4,12 @@ namespace Controllers\Admin;
 
 use Illuminate\Support\Facades\Input;
 use Tricks\Repositories\ProductRepositoryInterface;
+use Tricks\Repositories\ImageRepositoryInterface;
+use Tricks\Repositories\ProductPriceRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
 
 class ProductController extends BaseController
 {
@@ -14,16 +19,22 @@ class ProductController extends BaseController
      * @var \Tricks\Repositories\ProductRepositoryInterface
      */
     protected $products;
+    
+    protected $image;
+    protected $productprice;
 
     /**
      * Create a new ProductController instance.
      *
      */
-    public function __construct(ProductRepositoryInterface $products)
+    public function __construct(ProductRepositoryInterface $products, ImageRepositoryInterface $image,
+ProductPriceRepositoryInterface $productprice)
     {
         parent::__construct();
 
         $this->products = $products;
+        $this->image = $image;
+        $this->productprice = $productprice;
     }
 
     /**
@@ -75,7 +86,7 @@ class ProductController extends BaseController
     }
 
     /**
-     * Show the category edit form.
+     * Show the product edit form.
      *
      * @param  mixed $id
      * @return \Response
@@ -84,26 +95,28 @@ class ProductController extends BaseController
     {
         $product = $this->products->findById($id);
 
-        $this->view('admin.categories2.edit', compact('category'));
+        $this->view('admin.product.edit', compact('product'));
     }
 
     /**
-     * Handle the editing of a category.
+     * Handle the editing of a product.
      *
      * @param  mixed $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function postView($id)
     {
-        $form = $this->products->getForm();
+    	Log::info("postView in ProductController id"+$id);
+        $form = $this->products->getEditForm($id);
 
         if (! $form->isValid()) {
             return $this->redirectRoute('admin.product.view', $id)
                         ->withErrors($form->getErrors())
                         ->withInput();
         }
+        
 
-        $product = $this->products->update($id, $form->getInputData());
+        $product = $this->products->edit($id, $form->getInputData());
 
         return $this->redirectRoute('admin.product.view', $id);
     }
@@ -132,19 +145,57 @@ class ProductController extends BaseController
     
     public function postCreate()
     {
+    	Log::info('postCreate in ProductController');
     	$form = $this->products->getCreationForm();
-    
         	if (! $form->isValid()) {
-    		return $this->redirectBack([ 'errors' => $form->getErrors() ]);
+        		Log::info('Invalid');
+    		return $this->redirectBack(['errors' => $form->getErrors() ]);
     	}
-    
-    	$data = $form->getInputData();
+    	$data = [];
     	$data['user_id'] = Auth::user()->id;
+    	$data['image_id'] = 1; // default image_id
+    	$data['name'] = Input::get('name');
+    	$data['sku'] = Input::get('sku');
+    	$data['stock'] = Input::get('stock');
+    	$data['short_description'] = Input::get('short_description');
     	
     	$product = $this->products->create($data);
     	
-    	return $this->redirectRoute('admin.product.index');
+    	return  $product;
 
+    }
+    
+    
+    public function postUpdateImage() {
+    	$id = Input::get('product_id');
+    	// Add a new Image first,
+    	//TODO: update it to check if it already exists
+    	
+    	$data=[];
+    	$data['image_path'] = Input::get('image_path');
+    	$data['user_id'] = Auth::user()->id;
+    	
+    	$newImage = $this->image->createFromProduct($data);
+    	
+    	$product = $this->products->findById($id);
+    	Log::info($product);
+    	$product->image_id = $newImage->id;
+    	$product->save();
+        
+    	return Response::json('success', 200);
+    	
+    }
+    
+    public function postUpdatePrice() {
+    	$data=[];
+    	$data['user_id'] = Auth::user()->id;
+    	$data['price'] = Input::get('price');
+    	$data['product_id'] = Input::get('product_id');
+    	 
+    	$price = $this->productprice->create($data);
+    
+    	return Response::json('success', 200);
+    	 
     }
     
     

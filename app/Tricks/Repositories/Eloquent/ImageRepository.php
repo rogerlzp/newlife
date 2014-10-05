@@ -39,6 +39,28 @@ class ImageRepository extends AbstractRepository implements ImageRepositoryInter
 		return $image;
 	}
 
+	
+	/**
+	 * Create a new image in the database.
+	 *
+	 * @param  array $data
+	 * @return \Tricks\Board
+	 */
+	public function createFromProduct(array $data)
+	{
+		$image = $this->getNew();
+	
+		$image->user_id     = $data['user_id'];
+		$image->image_path     = $data['image_path'];
+	
+		if (array_key_exists('image_type',$data )){
+			$image->image_type     = $data['image_type'];
+		}
+		$image->save();
+	
+		return $image;
+	}
+	
 
 	/**
 	 * Get the image creation form service.

@@ -14,6 +14,7 @@ use Tricks\Exceptions\TagNotFoundException;
 use Illuminate\Database\Eloquent\Collection;
 use Tricks\Exceptions\CategoryNotFoundException;
 use Tricks\Repositories\ProductRepositoryInterface;
+use Illuminate\Support\Facades\Log;
 
 class ProductRepository extends AbstractRepository implements ProductRepositoryInterface
 {
@@ -210,10 +211,10 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
     }
 
     /**
-     * Create a new trick in the database.
+     * Create a new product in the database.
      *
      * @param  array $data
-     * @return \Tricks\Trick
+     * @return \Tricks\Product
      */
     public function create(array $data)
     {
@@ -224,6 +225,7 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
         $product->slug        = Str::slug($data['name'], '-');
         $product->short_description = e($data['short_description']);
         $product->sku       = e($data['sku']);
+        $product->image_id       = e($data['image_id']);
 
 
         $product->save();
@@ -235,19 +237,19 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
     }
 
     /**
-     * Update the trick in the database.
+     * Update the product in the database.
      *
-     * @param  \Tricks\Trick $trick
+     * @param  \Tricks\Product $product
      * @param  array $data
-     * @return \Tricks\Trick
+     * @return \Tricks\Product
      */
-    public function edit(Product $product, array $data)
+    public function edit($id, array $data)
     {
-        //$trick->user_id = $data['user_id'];
-        $product->title       = e($data['title']);
-        $product->slug        = Str::slug($data['title'], '-');
-        $product->description = e($data['description']);
-        $product->code        = $data['code'];
+        $product =  $this->findById($id);
+        $product->name       = e($data['name']);
+        $product->slug        = Str::slug($data['name'], '-');
+        $product->short_description = e($data['short_description']);
+    
 
         $product->save();
 
@@ -349,12 +351,49 @@ class ProductRepository extends AbstractRepository implements ProductRepositoryI
     }
 
     /**
-     * Get the trick edit form service.
+     * Get the product edit form service.
      *
-     * @return \Tricks\Services\Forms\TrickEditForm
+     * @return \Tricks\Services\Forms\ProductEditForm
      */
     public function getEditForm($id)
     {
         return new ProductEditForm($id);
+    }
+    
+    /**
+     * Find the product information
+     *
+     * @param  \Tricks\User $user
+     * @param  integer $perPage
+     * @return \Illuminate\Pagination\Paginator|\Tricks\image
+     */
+    public function findById($id)
+    {
+    	$product = $this->model->whereId($id)->first();
+    
+    	return $product;
+    }
+    
+    
+    /**
+     * Find all the images for the given user paginated.
+     *
+     * @param  \Tricks\User $user
+     * @param  integer $perPage
+     * @return \Illuminate\Pagination\Paginator|\Tricks\image[]
+     */
+    public function findAll($perPage = 9)
+    {
+
+    	$products = $this->model->all();
+
+    	return $products;
+    }
+    
+    public function findAttributesById($id) {
+    	Log::info("findAttributesById with parameter: "+$id);
+    	$product = $this->model->whereId($id)->first();
+        Log::info($product->attributes()->orderBy('created_at', 'desc')->get());
+    	return $product->attributes()->orderBy('created_at', 'desc')->get();
     }
 }

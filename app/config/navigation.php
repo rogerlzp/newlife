@@ -44,6 +44,18 @@ return array(
 			'active' => array('image*'),
 				// 'logged_in' => true
 		),
+		array(
+				'label' => '产品',
+				'route' => 'product.show',
+				'active' => array('product*'),
+				// 'logged_in' => true
+		),
+		array(
+				'label' => '购物车',
+				'route' => 'cart.show',
+				'active' => array('cart*'),
+				// 'logged_in' => true
+		),
 	),
 
 	'browse' => array(

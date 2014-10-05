@@ -17,8 +17,8 @@ class ProductEditForm extends AbstractForm
      * @var array
      */
     protected $rules = [
-        'title'         => 'required|min:4',
-        'description'   => 'required|min:10'
+        'name'         => 'required|min:4',
+        'short_description'   => 'required|min:10'
     ];
 
     public function __construct($id)
@@ -35,7 +35,7 @@ class ProductEditForm extends AbstractForm
      */
     protected function getPreparedRules()
     {
-        $this->rules['title'] .= ',' . $this->id;
+        $this->rules['name'] .= ',' . $this->id;
 
         return $this->rules;
     }
@@ -48,7 +48,8 @@ class ProductEditForm extends AbstractForm
     public function getInputData()
     {
         return array_only($this->inputData, [
-            'title', 'description'
+            'name', 'short_description'
         ]);
     }
 }
+

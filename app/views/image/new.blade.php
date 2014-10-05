@@ -135,13 +135,11 @@ function createBoard() {
         data: {'board_name':$('#newboard').val(), _token:"{{ csrf_token() }}"} ,
         type: "POST", 
         success: function(output){ 
-            console.log(output);
             var html = "<span class=\"selectOption\" value=\""+output.id + "\">"+output.board_name + "</span>";
             $( ".selectOptions" ).prepend(html);
         	$('div.selectBox').children('span.selected').html($('div.selectBox').children('div.selectOptions').children('span.selectOption:first').html());
         	$('div.selectBox').attr('value',$('div.selectBox').children('div.selectOptions').children('span.selectOption:first').attr('value'));
-        	$('#boards').attr('value',output.id); 
-                
+        	$('#boards').attr('value',output.id);       
         } 
     }); 
 }
@@ -200,8 +198,6 @@ function createBoard() {
 						</div>
 					</div>
 				</div>
-
-
 
 				<div class="form-group">{{Form::textarea('description',null,
 					array('class'=>'form-control','placeholder'=>trans('board.board_description_placeholder'),'rows'=>'3'));}}

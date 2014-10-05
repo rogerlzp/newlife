@@ -9,21 +9,25 @@ class ProductForm extends AbstractForm
      *
      * @var array
      */
+	/*
     protected $rules = [
         'name'         => 'required|min:4',
         'short_description'   => 'required|min:10',
-        'sku'   => 'required|min:6'
-    ];
+        'sku'   => 'required|min:6',
+        'stock'  => 'required',
+        '_token'  => 'required'
+    ];*/
 
     /**
      * Get the prepared input data.
      *
      * @return array
      */
+    
     public function getInputData()
     {
         return array_only($this->inputData, [
-            'name', 'short_description', 'sku'
+            'name', 'short_description', 'sku', 'stock'
         ]);
-    }
+    } 
 }

@@ -63,10 +63,6 @@ class UserImageController extends BaseController {
 		$data = $form->getInputData();
 		$data['user_id'] = Auth::user()->id;
 		
-		Log::info($data['image_path']);
-		
-		Log::info($data['boards']);
-		
 		$image = $this->image->create($data);
 		
 		$image_board_data = [];

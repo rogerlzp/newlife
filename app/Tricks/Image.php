@@ -38,4 +38,14 @@ class Image extends Model {
 	}
 	
 	
+	public function product()
+	{
+		return $this->hasOne('Tricks\Product');
+	}
+	
+	public function imageTags() {
+		return $this->hasMany('Tricks\ImageTag');		
+	}
+	
+	
 }

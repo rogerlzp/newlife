@@ -23,6 +23,7 @@
 	 <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('css/laratricks.min.css') }}">
          <link rel="stylesheet" href="{{ URL::asset('css/mysite.css') }}">
+              <link rel="stylesheet" href="{{ URL::asset('css/imgareaselect-animated.css') }}">
         <link href="{{ asset('css/font-awesome/font-awesome.css') }}" rel="stylesheet">
         @yield('styles')
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->

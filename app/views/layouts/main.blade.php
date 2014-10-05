@@ -21,6 +21,8 @@
 		{{ trans('layouts.site_title') }}
 	</title>
         <link rel="stylesheet" href="{{ URL::asset('css/laratricks.min.css') }}">
+         <link rel="stylesheet" href="{{ URL::asset('css/shopcart.css') }}">
+          <link rel="stylesheet" href="{{ URL::asset('css/checkout.css') }}">
          <link rel="stylesheet" href="{{ URL::asset('css/mysite.css') }}">
         <link href="{{ asset('css/font-awesome/font-awesome.css') }}" rel="stylesheet">
         @yield('styles')
@@ -34,6 +36,8 @@
 	src="{{ asset('js/tmpcdn/jquery-1.11.1.min.js') }}"></script>
 	  <script
 	src="{{ asset('js/tmpcdn/bootstrap.min.js') }}"></script>
+	  <script
+	src="{{ asset('js/checkout.js') }}"></script>
 
 
 	
