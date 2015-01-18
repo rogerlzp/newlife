@@ -1,34 +1,7 @@
 <div class="site-footer">
 	<div class="container">
 		<div class="footer-service">
-			<ul class="list-service clearfix">
-				<li><a rel="nofollow"
-					href="http://www.mi.com/service/exchange#repaire" target="_blank"
-					onclick="_msq.push(['trackEvent','CN-WW-HP-AD-0', 'http://www.mi.com/service/exchange#repaire', '0']);_hmt.push(['_trackEvent','PC','首页_service_0_http://www.mi.com/service/exchange#repaire']);_msq.push(['trackEvent', '0011000', 'http://www.mi.com/service/exchange#repaire', 'pcpid']);"
-					data-stat-id="0011000"> <i class="iconfont"></i> <strong>1小时快修服务</strong>
-				</a></li>
-				<li><a rel="nofollow" href="http://www.mi.com/service/exchange#back"
-					target="_blank"
-					onclick="_msq.push(['trackEvent','CN-WW-HP-AD-1', 'http://www.mi.com/service/exchange#back', '1']);_hmt.push(['_trackEvent','PC','首页_service_1_http://www.mi.com/service/exchange#back']);_msq.push(['trackEvent', '0011001', 'http://www.mi.com/service/exchange#back', 'pcpid']);"
-					data-stat-id="0011001"> <i class="iconfont"></i> <strong>7天无理由退货</strong>
-				</a></li>
-				<li><a rel="nofollow" href="http://www.mi.com/service/exchange#free"
-					target="_blank"
-					onclick="_msq.push(['trackEvent','CN-WW-HP-AD-2', 'http://www.mi.com/service/exchange#free', '2']);_hmt.push(['_trackEvent','PC','首页_service_2_http://www.mi.com/service/exchange#free']);_msq.push(['trackEvent', '0011002', 'http://www.mi.com/service/exchange#free', 'pcpid']);"
-					data-stat-id="0011002"> <i class="iconfont"></i> <strong>15天免费换货</strong>
-				</a></li>
-				<li><a rel="nofollow" href="http://www.mi.com/service/exchange#mail"
-					target="_blank"
-					onclick="_msq.push(['trackEvent','CN-WW-HP-AD-3', 'http://www.mi.com/service/exchange#mail', '3']);_hmt.push(['_trackEvent','PC','首页_service_3_http://www.mi.com/service/exchange#mail']);_msq.push(['trackEvent', '0011003', 'http://www.mi.com/service/exchange#mail', 'pcpid']);"
-					data-stat-id="0011003"> <i class="iconfont"></i> <strong>满150元包邮</strong>
-				</a></li>
-				<li><a rel="nofollow"
-					href="http://www.mi.com/c/service/poststation/" target="_blank"
-					onclick="_msq.push(['trackEvent','CN-WW-HP-AD-4', 'http://www.mi.com/c/service/poststation/', '4']);_hmt.push(['_trackEvent','PC','首页_service_4_http://www.mi.com/c/service/poststation/']);_msq.push(['trackEvent', '0011004', 'http://www.mi.com/c/service/poststation/', 'pcpid']);"
-					data-stat-id="0011004"> <i class="iconfont"></i> <strong>460余家售后网点</strong>
-				</a></li>
-
-			</ul>
+		
 		</div>
 		<div class="footer-links clearfix">
 

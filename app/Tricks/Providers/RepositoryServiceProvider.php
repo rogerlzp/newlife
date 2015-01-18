@@ -103,5 +103,35 @@ class RepositoryServiceProvider extends ServiceProvider
         		'Tricks\Repositories\CartRepositoryInterface',
         		'Tricks\Repositories\Eloquent\CartRepository'
         );
+        
+
+        $this->app->bind(
+        		'Tricks\Repositories\ProvinceRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\ProvinceRepository'
+        );
+        
+        $this->app->bind(
+        		'Tricks\Repositories\CityRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\CityRepository'
+        );
+        
+        $this->app->bind(
+        		'Tricks\Repositories\AddressRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\AddressRepository'
+        );
+        
+        $this->app->bind(
+        		'Tricks\Repositories\TorderRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\TorderRepository'
+        );
+        
+        $this->app->bind(
+        		'Tricks\Repositories\TorderItemRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\TorderItemRepository'
+        );
+        $this->app->bind(
+        		'Tricks\Repositories\InvoiceRepositoryInterface',
+        		'Tricks\Repositories\Eloquent\InvoiceRepository'
+        );
     }
 }

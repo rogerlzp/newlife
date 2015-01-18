@@ -17,7 +17,7 @@ class CreateCartItemTables extends Migration {
 			$table->engine = "InnoDB";
 			$table->increments("id")->unsigned();
 			
-			$table->integer("quality");
+			$table->integer("quantity");
 			$table->integer("product_id")->unsigned();
 			$table->integer("cart_id")->unsigned();
 			$table->float("price");

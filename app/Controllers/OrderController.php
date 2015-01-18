@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Tricks\Repositories\CartRepositoryInterface;
 use Tricks\Repositories\ProductRepositoryInterface;
 use Tricks\Repositories\CartItemRepositoryInterface;
+use Tricks\Repositories\TorderRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends BaseController
@@ -39,19 +40,30 @@ class OrderController extends BaseController
     
 
     /**
+     * Order repository.
+     *
+     * @var \Tricks\Repositories\OrderRepositoryInterface
+     */
+    protected $torder;
+    
+    
+
+    /**
      * Create a new CartController instance.
      *
      * @param \Tricks\Repositories\ProductRepositoryInterface  $products
      * @return void
      */
     public function __construct(CartRepositoryInterface $cart, CartItemRepositoryInterface $cartitem, 
-    		ProductRepositoryInterface $product)
+    		ProductRepositoryInterface $product, TorderRepositoryInterface $torder)
     {
         parent::__construct();
+        $this->beforeFilter('auth');
 
         $this->cart = $cart;
         $this->cartitem = $cartitem;
         $this->product = $product;
+        $this->torder = $torder;
     }
     
     /**
@@ -62,6 +74,8 @@ class OrderController extends BaseController
 
     	return  $this->view('order.index');
     }
+    
+    
     
     /**
      * list the most popular images when the use is not logged
@@ -83,20 +97,10 @@ class OrderController extends BaseController
      */
     
     public function addToCart() {
-    	
-    	Log::info('addToCart');
-    
-    
-    	
     	$data=[];
-
-    	
     	$session_id = Session::getId();
-    	Log::info("sessio id="+$session_id);
-    	
     	$data['session_id']=$session_id;
     	$ip = Request::getClientIp();
-    	Log::info("ip address ="+$ip);
     	$data['ipaddress']=$ip;
     	
     	if(Auth::check()) {
@@ -123,10 +127,57 @@ class OrderController extends BaseController
     	
     	$cart->cartitems()->save($cartitem);
     	
+    	Session::put('cart', $cart);
+    	Session::put('Hello', 'World');
+    	
     	return Response::make('success', 200);
     	// return  $this->view('product.single_show', compact('product'));
     }
     
+    
+    /**
+     * 生成新的订单
+     * user_id, if not then add (session_id)
+     * 根据product_id 得到一个cart_item id
+     * 然后在将cart_item 加到cart里面
+     */
+    
+    public function postNewOrder() {
+
+    	$selected_address_id = Input::get('selected_address');
+    	Log::info("selected_address_id=".$selected_address_id);
+    	$delivery_time = Input::get('delivery_time_hidden');
+    	$cart = Session::get('cart');
+    	$data=[];
+    	
+    	if(Input::get('note')) {
+    		$data['note']= Input::get('note');
+    	} else {
+    		$data['note']="";
+    	}
+    		
+    	if(Input::get('voucher_code')) {
+    		$data['voucher_code']= Input::get('voucher_code');
+    	} else {
+    		$data['voucher_code']="";
+    	}
+
+    	$data['user_id'] = Auth::user()->id;
+    	$data['address_id'] = $selected_address_id;
+    	$data['ipaddress'] = $cart->ipaddress;
+    	$data['shipping_method'] = "sm1";
+    	$data['payment_method'] = "online1";
+    	$data['delivery_time'] = $delivery_time;
+    	$data['product_cost'] = $cart['total_price'];
+    	$data['shipping_cost'] = 5;
+    	
+    	
+    	
+    	$torder = $this->torder->create($data);
+
+    	return Response::make('success', 200);
+    	// return  $this->view('product.single_show', compact('product'));
+    }
     
     /**
      * Show the single product page.

@@ -3,33 +3,25 @@
 @section('scripts')
 <script>
 $(document).ready(function(){
-	
 
 });
 
 function toggleFollow(){		
-	if($('#follow').text().trim() === "follow") {
 	$.ajax({ 
         url: "{{URL::route('user.follow')}}",
         dataType: 'json', 
         data: {'follow_id': "{{$user->id}}", _token: "{{ csrf_token() }}"} ,
         type: "POST", 
         success: function(output){ 
+            if(output.result) {
             $('#follow').text("unfollow");
+            } else {
+            	   $('#follow').text("follow");
+                }
+            
         }
 	});
-	} else {
-		$.ajax({ 
-	        url: "{{URL::route('user.unfollow')}}",
-	        dataType: 'json', 
-	        data: {'follow_id': "{{$user->id}}", _token: "{{ csrf_token() }}"} ,
-	        type: "POST", 
-	        success: function(output){ 
-	        	 $('#follow').text("follow");
-	        }
-		});
-
-	}
+	
 }
 
 </script>
@@ -56,43 +48,41 @@ function toggleFollow(){
                
                 </div>
               <div class="text-muted">
-                      <b>followers</b>
+                      <b>followers</b> {{count($user->followers)}}
                 </div>
-                  <div class="text-muted">
-                            <b>followings:</b>
+                 <div class="text-muted">
+                            <b>followings:</b>  {{count($user->followings)}}
                   </div>
                   
-                  @if(Auth::user()->follows) 
-                  <p>follows</p>
-                  @else
-                  <p>not follow</p>
-                  @endif
                   
                   <div class="btn btn-primary" onclick="toggleFollow()">
-                            <p id="follow">follow</b>
+                  @if($followed)
+                            <p id="follow">unfollow</b>
+                  @else 
+                   <p id="follow">follow</b>
+                  @endif
                   </div>
-                        
-                <table>
-                    <tr>
-                        <th>{{ trans('user.total_tricks') }}</th>
-                        <td>{{ count($boards) }}</td>
-                    </tr>
-                    <tr>
-                        <th width="140">{{ trans('user.last_trick') }}</th>
-                       
-                    </tr>
-                </table>
+
             </div>
         </div>
     </div>
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-title">{{ trans('portfolio.research') }}</h1>
+        </div>
+        
+        
+    </div>
+
 
     <div class="row push-down">
         <div class="col-lg-12">
-            <h1 class="page-title">{{ trans('user.submitted_tricks') }}</h1>
+            <h1 class="page-title">{{ trans('portfolio.portfolio') }}</h1>
         </div>
     </div>
 
-    @include('board.grid', [ 'boards' => $boards ])
+    @include('portfolio.grid', [ 'portfolios' => $portfolios ])
 </div>
 
 

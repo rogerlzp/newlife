@@ -7,7 +7,9 @@ use GithubProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 use Tricks\Repositories\UserRepositoryInterface;
+use Tricks\Repositories\CartRepositoryInterface;
 
 class AuthController extends BaseController
 {
@@ -17,6 +19,13 @@ class AuthController extends BaseController
      * @var \Tricks\Repositories\UserRepositoryInterface
      */
     protected $users;
+    
+    /**
+     * Cart Repository.
+     *
+     * @var \Tricks\Repositories\CartRepositoryInterface
+     */
+    protected $cart;
 
     /**
      * Create a new AuthController instance.
@@ -24,11 +33,12 @@ class AuthController extends BaseController
      * @param  \Tricks\Repositories\UserRepositoryInterface $users
      * @return void
      */
-    public function __construct(UserRepositoryInterface $users)
+    public function __construct(UserRepositoryInterface $users, CartRepositoryInterface $cart)
     {
         parent::__construct();
 
         $this->users = $users;
+        $this->cart = $cart;
     }
 
     /**
@@ -56,7 +66,22 @@ class AuthController extends BaseController
             unset($credentials['username']);
         }
 
+        // check if the session has cart
+        // if yes, then add the cart to user
+        $original_session_id = Session::getId();
+        Log::info("original sessin id".$original_session_id);
+        
         if (Auth::attempt($credentials, $remember)) {
+        	
+        	$session_id = Session::getId();
+        	Log::info("session id in postLogin".$session_id);
+        	Log::info("user id in postLogin".Auth::user()->id);
+        	
+        	$cart = $this->cart->getCartBySessionId($original_session_id);
+        	$cart->session_id = $session_id ;
+        	$cart->user_id =  Auth::user()->id;
+        	$cart->save();
+
             return $this->redirectIntended(route('image.show'));
         }
 

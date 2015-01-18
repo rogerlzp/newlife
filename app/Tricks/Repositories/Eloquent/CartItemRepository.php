@@ -70,7 +70,7 @@ class CartItemRepository extends AbstractRepository implements CartItemRepositor
     {
         $cartitem = $this->getNew();
         $cartitem->price     = $data['price'];
-        $cartitem->quality     = $data['quality'];
+        $cartitem->quantity     = $data['quantity'];
 		$cartitem->product_id = $data['product_id'];
 		$cartitem->cart_id = $data['cart_id'];
         

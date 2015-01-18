@@ -36,8 +36,6 @@
 	src="{{ asset('js/tmpcdn/jquery-1.11.1.min.js') }}"></script>
 	  <script
 	src="{{ asset('js/tmpcdn/bootstrap.min.js') }}"></script>
-	  <script
-	src="{{ asset('js/checkout.js') }}"></script>
 
 
 	
@@ -68,4 +66,4 @@
             (function(){var e=document.createElement("script");e.async=true;e.type="text/javascript";e.src="//"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("HEAD")[0]||document.getElementsByTagName("BODY")[0]).appendChild(e)})()
         </script>
     </body>
-</html>
+    </html>

@@ -132,6 +132,9 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
     Route::post('user/avatar', [ 'as' => 'user.avatar', 'uses' => 'UserController@postAvatar' ]);
     Route::get('user/image', [ 'as' => 'user.image', 'uses' => 'UserController@getImage' ]);
     Route::get('user/profile', [ 'as' => 'user.profile', 'uses' => 'UserController@getProfile' ]);
+    
+    Route::get('portfolio/pmyshow', [ 'as' => 'portfolio.profile_showmy', 'uses' => 'PortfolioController@getProfileMyShow' ]);
+    
 
     # Trick creation route
     Route::get('user/tricks/new', [ 'as' => 'tricks.new', 'uses' => 'UserTricksController@getNew' ]);
@@ -151,7 +154,7 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
 
     # This route will match the user by username to display their public profile
     # (if we want people to see who favorites and who posts what)
-    Route::get('{user}', [ 'as' => 'user.profile', 'uses' => 'UserController@getPublic' ]);
+  //  Route::get('{user}', [ 'as' => 'user.profile', 'uses' => 'UserController@getPublic' ]);
     
     # Board creation route
     Route::get('user/board/new', [ 'as' => 'board.new', 'uses' => 'UserBoardController@getNew' ]);
@@ -211,7 +214,7 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
    Route::get('product/{id}', [ 'as' => 'product.single', 'uses' => 'ProductController@getSingle' ]);
     
    # Add Test route
-   Route::get('user/test1', ['as' => 'user.test1', 'uses' => 'TestController@testComment']);
+   Route::get('user/test1', ['as' => 'user.test1', 'uses' => 'TestController@test123']);
    Route::get('user/test2', ['as' => 'user.test1', 'uses' => 'TestController@testProductInfo']);
    Route::get('user/tfollow1', ['as' => 'user.test_follow', 'uses' => 'TestController@testUserFollow']);
    
@@ -226,6 +229,28 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
    # order index
    # Cart index
    Route::get('cart/checkout', [ 'as' => 'checkout.index', 'uses' => 'OrderController@getIndex' ]);
+   Route::get('user/order', [ 'as' => 'user.order', 'uses' => 'UserController@getUserOrder' ]);
    
+   
+   # Cart index
+   Route::get('hello/{id}', [ 'as' => 'province.data', 'uses' => 'AddressController@getProvinceData' ]);
+   Route::get('city/{id}', [ 'as' => 'city.data', 'uses' => 'AddressController@getCityData' ]);
+   Route::post('address/save', [ 'as' => 'address.save', 'uses' => 'AddressController@saveAddress' ]);
+   
+   // Order route
+   Route::post('order/new', [ 'as' => 'order.new', 'uses' => 'OrderController@postNewOrder' ]);
+   
+   // my profile route
+  // Route::get('{user}', [ 'as' => 'user.profile', 'uses' => 'UserController@getMyProfile' ]);
+  // Route::get('{user}', [ 'as' => 'user.order', 'uses' => 'UserController@getMyOrder' ]);
+   
+  // youku route
+  
+   // paypal route
+   Route::get('payment', ['as' => 'payment.test1', 'uses' => 'PayPalController@getPayment']);
+   
+   Route::post('payment', ['as' => 'payment.test1', 'uses' => 'PayPalController@postPayment']);
+   Route::get('oayment/status', ['as' => 'payment.status', 'uses' => 'PayPalController@getPaymentStatus']);
+  
    
 });

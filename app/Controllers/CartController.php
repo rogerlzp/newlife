@@ -61,17 +61,8 @@ class CartController extends BaseController
     public function getIndex() {
     	$session_id = Session::getId();
     	$cart = $this->cart->findBySessionId($session_id);
-    	Log::info($cart->id);
-    	Log::info($cart);
-    	$cartitem = $cart->cartitems()->first();
-    	Log::info($cartitem);
-    	
-    	$product = $cartitem->product;
-    	Log::info($product);
-    	
-    	$cartitems = $cart->cartitems()->get();
-    	Log::info($cartitems);
-    	return  $this->view('cart.index', compact('cartitems'));
+
+    	return  $this->view('cart.index', compact('cart'));
     }
     
     /**
@@ -91,54 +82,84 @@ class CartController extends BaseController
      * user_id, if not then add (session_id)
      * 根据product_id 得到一个cart_item id
      * 然后在将cart_item 加到cart里面
+     * 
+     * 首先判断购物车里面有没有
+     * 如果没有的话，加一个
+     * 如果有的话，数目加一个
      */
     
     public function addToCart() {
     	
-    	Log::info('addToCart');
-    
-    
-    	
     	$data=[];
-
-    	
     	$session_id = Session::getId();
-    	Log::info("sessio id="+$session_id);
-    	
     	$data['session_id']=$session_id;
     	$ip = Request::getClientIp();
-    	Log::info("ip address ="+$ip);
     	$data['ipaddress']=$ip;
     	
+    	// if user already login
     	if(Auth::check()) {
     		$data['user_id'] = Auth::user()->id;
+    		$cart = $this->cart->getCartByUserId(Auth::user()->id);
     	} else {
     		$data['user_id'] = 1;
+    		$cart = $this->cart->getCartBySessionId($session_id);
     	}
+    	// product already exists
     	
     	
-    	$cart = $this->cart->create($data);
-    	
-    	
-    	$data1 = [];
-    	$data1['product_id'] = Input::get('product_id');
-    	$data1['quality']  = 1 ; //TODO: update it
-    	
-
-    	
-    	$product = $this->product->findById($data1['product_id']);
-    	
-    	$data1['cart_id'] = $cart->id;
-    	$data1['price'] = $product->price->price;
-    	$cartitem = $this->cartitem->create($data1);
-    	
-    	$cart->cartitems()->save($cartitem);
-    	
-    	return Response::make('success', 200);
-    	// return  $this->view('product.single_show', compact('product'));
+    	// create a new cart if NOT exist
+    	if(!$cart) {    	
+    		$cart = $this->cart->create($data);
+    		$data1 = [];
+    		$data1['product_id'] = Input::get('product_id');
+    		$data1['quantity']  = 1 ; //TODO: update it
+    		$product = $this->product->findById($data1['product_id']);
+    		$data1['cart_id'] = $cart->id;
+    		$data1['price'] = $product->price->price;
+    		$cartitem = $this->cartitem->create($data1);
+    		$cart->cartitems()->save($cartitem);
+    		 
+    		$cart->total_quantity += 1;
+    		$cart->total_price += $product->price->price;;
+    		$cart->save();
+    		 
+    		Session::put('cart', $cart);
+    		 
+    		return Response::make('success', 200);
+    	} else {
+    		foreach($cart->cartitems as $cartitem) {
+    			if(Input::get('product_id') == $cartitem->product_id) {
+    				$cartitem->quantity +=  1;
+    				$cart->total_quantity += 1;
+    				$cart->total_price += $cartitem->product->price->price;
+    				$cartitem->save();
+    				$cart->cartitems()->save($cartitem);
+    				$cart->save();
+    				Session::put('cart', $cart);
+    				return Response::make('success', 200);
+    			}
+    		}
+    		$data1 = [];
+    		$data1['product_id'] = Input::get('product_id');
+    		$data1['quantity']  = 1 ; //TODO: update it
+    		$product = $this->product->findById($data1['product_id']);
+    		$data1['cart_id'] = $cart->id;
+    		$data1['price'] = $product->price->price;
+    		$cartitem = $this->cartitem->create($data1);
+    		$cart->cartitems()->save($cartitem);
+    		
+    		$cart->total_quantity += 1;
+    		$cart->total_price += $product->price->price;;
+    		$cart->save();
+    		Session::put('cart', $cart);
+    		return Response::make('success', 200);
+    		
+    		
+    	}
+ 
     }
     
-    
+   
     /**
      * Show the single product page.
      *

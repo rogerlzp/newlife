@@ -72,6 +72,31 @@ class CartRepository extends AbstractRepository implements CartRepositoryInterfa
 
         return $cart;
     }
+    
+    /**
+     * get a new Cart from SessionId
+     *
+     * @param  array $data
+     * @return \Tricks\Product
+     */
+    public function getCartBySessionId($sessionId)
+    {
+    	$cart = $this->findCartBySessionId($sessionId);    
+    	return $cart;
+    }
+    
+    
+    /**
+     * get a new Cart from User Id
+     *
+     * @param  array $data
+     * @return \Tricks\Product
+     */
+    public function getCartByUserId($userId)
+    {
+    	$cart = $this->findCartByUserId($userId);
+    	return $cart;
+    }
 
     /**
      * Update the product in the database.
@@ -118,6 +143,35 @@ class CartRepository extends AbstractRepository implements CartRepositoryInterfa
     }
     
     /**
+     * Find the cart by sessionId
+     *
+     * @param  \Tricks\User $user
+     * @param  integer $perPage
+     * @return \Illuminate\Pagination\Paginator|\Tricks\image
+     */
+    public function findCartBySessionId($id)
+    {
+    	$cart = $this->model->whereSessionId($id)->first();
+    
+    	return $cart;
+    }
+    
+    /**
+     * Find the cart by userId
+     *
+     * @param  \Tricks\User $user
+     * @param  integer $perPage
+     * @return \Illuminate\Pagination\Paginator|\Tricks\image
+     */
+    public function findCartByUserId($id)
+    {
+    	$cart = $this->model->whereUserId($id)->first();
+    
+    	return $cart;
+    }
+    
+    
+    /**
      * Find the product information
      *
      * @param  \Tricks\User $user
@@ -130,6 +184,7 @@ class CartRepository extends AbstractRepository implements CartRepositoryInterfa
     
     	return $product;
     }
+    
     
     public function findCartItems($perPage=10) {
     	

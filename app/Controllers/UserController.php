@@ -13,6 +13,7 @@ use Tricks\Repositories\ImageBoardRepositoryInterface;
 use Tricks\Repositories\BoardRepositoryInterface;
 use Tricks\Repositories\UserRepositoryInterface;
 use Tricks\Repositories\FollowRepositoryInterface;
+use Tricks\Repositories\TorderRepositoryInterface;
 
 use Illuminate\Support\Facades\Log;
 
@@ -57,6 +58,13 @@ class UserController extends BaseController
     protected $users;
 
     /**
+     * Order repository.
+     *
+     * @var \Tricks\Repositories\OrderRepositoryInterface
+     */
+    protected $torder;
+    
+    /**
      * The currently authenticated user.
      *
      * @var \User
@@ -78,7 +86,7 @@ class UserController extends BaseController
      */
     public function __construct(TrickRepositoryInterface $tricks, UserRepositoryInterface $users, 
     		ImageBoardRepositoryInterface $image_board, BoardRepositoryInterface $boards, 
-    		ImageRepositoryInterface $images, FollowRepositoryInterface $follow)
+    		ImageRepositoryInterface $images, FollowRepositoryInterface $follow, TorderRepositoryInterface $torder)
     {
     	Log::info(' __construct in UserController');
         parent::__construct();
@@ -92,6 +100,7 @@ class UserController extends BaseController
         $this->boards = $boards;
         $this->follow = $follow;
         $this->image_board = $image_board;
+        $this->torder = $torder;
     }
 
     /**
@@ -243,6 +252,62 @@ class UserController extends BaseController
     	$follow_id = Input::get('follow_id');;
     	$this->follow->deleteFollow($user_id, $follow_id);
     	return Response::json('success', 200);
+    }
+    
+    
+    
+
+    /**
+     * Show the user's profile page.
+     *
+     * @return \Response
+     */
+    public function getMyProfile()
+    {
+    	//	$images = $this->images->findAllForUser($this->user, 10);
+    
+    //	$boards = $this->boards->findAllForUser2($this->user);
+    
+    	$this->view('user.profile2');
+    	 
+    }
+    
+
+    /**
+     * Show the user's profile page.
+     *
+     * @return \Response
+     */
+    public function getMyOrder()
+    {
+    	$orderList = $this->user->torders()->get();
+    	Log::info("getMyOrder");
+    	Log::info($orderList);
+
+    
+    	
+    	return Response::json($orderList);
+    
+    }
+
+    
+    /**
+     * Show the user's profile page.
+     *
+     * @return \Response
+     */
+    public function getUserOrder()
+    {
+    	$userId = Input::get('u');
+    	Log::info('userid='.$userId);
+    	$orderList = $this->user->torders()->get();
+    	Log::info("getMyOrder");
+    	Log::info($orderList);
+    
+    	$this->view('user.order', compact('orderList'));
+    	 
+    	
+    
     }
     
 }

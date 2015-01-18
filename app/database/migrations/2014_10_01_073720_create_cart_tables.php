@@ -20,7 +20,9 @@ class CreateCartTables extends Migration {
 			$table->string("session_id");
 			$table->integer("user_id")->unsigned();
 			$table->string("ipaddress");
-		
+			$table->integer("total_quantity");
+			$table->float("total_price");
+			
 			$table->timestamps();
 			$table->foreign('user_id')->references('id')
 			->on('users')->onUpdate('cascade')

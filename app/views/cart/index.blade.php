@@ -1,8 +1,47 @@
-@section('content') 
-@foreach($cartitems as $cartitem)
-<p>{{$cartitem->id}} {{$cartitem->price}}</p>
 
-@endforeach
+@section('scripts')
+<script>
+$(document).ready(function(){
+
+
+	 $(".J_minus").on("click",
+		        function() {
+	        $(this).parent.parent()
+		 data-commodityid
+		alert('minus');
+	 });
+
+	 $(".J_plus").on("click",
+		        function() {
+		alert('plus');
+	 });
+
+
+});
+
+
+function addProductData(product){
+	$.ajax({ 
+        url: "{{URL::route('province.data')}}",
+        dataType: 'json', 
+        data: {'province_id':province, _token:"{{ csrf_token() }}"} ,
+        type: "GET", 
+        success: function(cities){ 
+        	var html = "";
+            $.each(cities, function(index, city){
+				html += "<option  value="+city.id+">"+city.city_name +"</option>";				
+                });
+            $("#Citys").append(html);
+            $("#Citys").removeAttr('disabled');
+        }   
+    }); 
+	
+}
+</script>
+@stop
+
+@section('content') 
+
 
 
 <div class="container">
@@ -22,8 +61,8 @@
 						<span class="col col-3">数量</span> <span class="col col-4">小计</span>
 						<span class="col col-5">操作</span>
 					</dt>
-					@foreach($cartitems as $cartitem)
-					<dd class="item  clearfix " data-cos="0"
+					@foreach($cart->cartitems as $cartitem)
+					<dd class="item" data-cos="0"
 						data-commodityid="{{$cartitem->product->id}}">
 						<div class="item-row">
 							<div class="col col-1">
@@ -47,29 +86,34 @@
 							</div>
 
 							<div class="col col-2">{{$cartitem->price}}</div>
-						</div>
 
-						<div class="col col-3">
-							<div class="change-goods-num clearfix J_changeGoodsNum">
-								<a href="javascript:void(0)" class="J_minus"> <i
-									class="iconfont">-</i>
-								</a> <input tyep="text" name="Cart[2135000520_0_buy]" value="1"
-									data-num="1" data-buylimit="3" autocomplete="off"
-									class="goods-num J_goodsNum"> <a href="javascript:void(0)"
-									class="J_plus"> <i class="iconfont">+</i>
-								</a>
+
+							<div class="col col-3">
+								<div class="change-goods-num clearfix J_changeGoodsNum">
+									<a href="javascript:void(0)" class="J_minus"> <i
+										class="iconfont">-</i>
+									</a> 
+									<input tyep="text" name="{{$cartitem->product->id}}" value="1"
+										data-num="1" data-buylimit="3" autocomplete="off"
+										class="goods-num J_goodsNum">
+										 <a href="javascript:void(0)"
+										class="J_plus"> <i class="iconfont">+</i>
+									</a>
+
+
+								</div>
+
+							</div>
+							<div class="col col-4">
+								<em>{{$cartitem->price * $cartitem->quantity }}</em>
+								<p></p>
 							</div>
 
-						</div>
-						<div class="col col-4">
-							<em>{{$cartitem->price * $cartitem->quality }}</em>
-							<p></p>
-						</div>
-
-						<div class="col col-5">
-							<a id="2135000520_0_buy" data-msg="确定删除吗？"
-								href="/cart/delete/id/2135000520_0_buy" title="删除"
-								class="del J_delGoods"><i class="iconfont">x</i> </a>
+							<div class="col col-5">
+								<a id="" data-msg="确定删除吗？"
+									href="/cart/delete/id/{{$cartitem->product->id}}" title="删除"
+									class="del J_delGoods"><i class="iconfont">x</i> </a>
+							</div>
 						</div>
 					</dd>
 
@@ -82,17 +126,21 @@
 			</div>
 		</div>
 	</div>
-	       <div class="shop-cart-total">
-                        <p class="total-price">商品总计：<span><strong>1,778.00</strong>元</span></p>
-        </div>
-        <div class="shop-cart-action clearfix">
-            <a href="{{URL::route('checkout.index')}}" class="btn btn-primary btn-next" data-needlogin="true" data-rel="/buy/checkout" id="toCheckBtn">去结账</a>
-            <a href="http://www.mi.com/accessories" class="btn btn-lineDakeLight btn-back">继续购物</a>
-            <div class="tips">
-                                            </div>
-        </div>
-        
-       
+	<div class="shop-cart-total">
+		<p class="total-price">
+			商品总计：<span><strong>{{$cart->total_price}}</strong>元</span>
+		</p>
+	</div>
+	<div class="shop-cart-action clearfix">
+		<a href="{{URL::route('checkout.index')}}"
+			class="btn btn-primary btn-next" data-needlogin="true"
+			data-rel="/buy/checkout" id="toCheckBtn">去结账</a> <a
+			href="http://www.mi.com/accessories"
+			class="btn btn-lineDakeLight btn-back">继续购物</a>
+		<div class="tips"></div>
+	</div>
+
+
 </div>
 
 

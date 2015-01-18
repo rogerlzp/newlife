@@ -1,9 +1,132 @@
-@section('content')
+@section('scripts')
+<script>
+$(document).ready(function(){
+
+	$('#checkoutToPay').on('click',function() {
+		alert("check out to pay");	
+	});
+	
+	 $("#J_useNewAddr").on("click",
+		        function() {
+		 $("#J_editAddrBox").show();
+	 });
+
+	 $("#J_editAddrOk").on("click",
+		        function() {
+	//	 setAddress();
+	 });
+
+
+	  $("#Provinces").change(function() {
+         var b = $(this).val();
+         getProvinceData(b);
+         
+         $("#Citys").prop("disabled", !0).find("option:gt(0)").remove(),
+         $("#Countys").prop("disabled", !0).find("option:gt(0)").remove()
+     });
+	  $("#Citys").change(function() {
+	         var b = $(this).val();
+	         getCityData(b);
+	     });
+
+	  $("#checkoutAddrList > div[id^=address]").click(function() {
+	         var b = $(this);
+	         $("#checkoutAddrList > div[id^=address]").removeClass('selected');
+	         b.addClass("selected");
+	         $("#selected_address").attr('value', b.attr('id').substr(8));
+	         
+	     });
+
+	  $("#CheckoutTime > li").click(function() {
+	         var b = $(this);
+	         $("#CheckoutTime > li").removeClass('selected');
+	         b.addClass("selected");
+	         $("#delivery_time_hidden").attr('value', b.children('input').val());
+	     });
+	  $("#checkoutInvoice > div > div > ul > li").click(function() {
+	         var b = $(this);
+	         $("#checkoutInvoice > div > div > ul > li").removeClass('selected');
+	         b.addClass("selected");
+	     });
+
+	
+
+});
+
+
+function getProvinceData(province){
+	$.ajax({ 
+        url: "{{URL::route('province.data')}}",
+        dataType: 'json', 
+        data: {'province_id':province, _token:"{{ csrf_token() }}"} ,
+        type: "GET", 
+        success: function(cities){ 
+        	var html = "";
+            $.each(cities, function(index, city){
+				html += "<option  value="+city.id+">"+city.city_name +"</option>";				
+                });
+            $("#Citys").append(html);
+            $("#Citys").removeAttr('disabled');
+        }   
+    }); 
+	
+}
+
+
+function getCityData(province){
+	$.ajax({ 
+        url: "{{URL::route('city.data')}}",
+        dataType: 'json', 
+        data: {'city_id':province, _token:"{{ csrf_token() }}"} ,
+        type: "GET", 
+        success: function(counties){ 
+        	var html = "";
+            $.each(counties, function(index, county){
+				html += "<option  value="+county.id+">"+county.county_name +"</option>";				
+             });
+            $("#Countys").append(html);
+            $("#Countys").removeAttr('disabled');
+        }   
+    }); 
+}
+
+function setAddress() {
+	$.ajax({ 
+        url: "{{URL::route('address.save')}}",
+        dataType: 'json', 
+        data: {'province_id': $("#Provinces").val(), 'city_id':$("#Citys").val(), 'county_id': $("#Countys").val(),
+            'consignee': $("#Consignee").val(), 'phone':$("#Telephone").val(),
+            'street': $("#Street").val(), 'zipcode':$("#Zipcode").val(), 
+              _token:"{{ csrf_token() }}"} ,
+        type: "POST", 
+        success: function(output){ 
+        	alert("success");
+   			var html="<dl class=\"item selected\"  >" +
+   						"<dt> <strong class=\"itemConsignee\">"+$("#Consignee").val()+"</strong>"
+   						+ "<strong class=\"itemTag tag\">"+$('#newTag').val()+"</strong></dt>"
+   						+"<dd> <p> "+ $("#Telephone").val() +"</p>" + "<p> "+ $("#Provinces").val() 
+   						+" "+ $("#Citys").val() + $("#Countys").val() + "</p>"
+   						+ "<p> " +$("#Street").val() + "</p> </dd> </dl>";
+			
+   			$('#checkoutAddrList').append(html);		
+   		//	$('#newConsignee').hidden();	
+   			$("#J_editAddrBox").hide();	
+   	   					
+        } ,
+        error: function(error1) {
+			alert(error1);
+			alert("wrong");
+        }  
+    }); 
+
+}
+</script>
+
+@stop @section('content')
 <div class="container">
 	<div class="checkout-box">
-		<form id="checkoutForm"
-			action="http://order.mi.com/buy/submit?r=165155486_t1412485408"
-			method="post">
+	{{ Form::open(array('class'=>'form-vertical', 'url'=>route('order.new'), 
+	'id'=>'checkoutForm', 'role'=>'form'))}}
 			<div class="checkout-box-bd">
 				<!-- 地址状态 0：默认选择；1：新增地址；2：修改地址 -->
 				<input type="hidden" name="Checkout[addressState]" id="addrState"
@@ -16,10 +139,22 @@
 					</div>
 					<div class="box-bd">
 						<div class="clearfix xm-address-list" id="checkoutAddrList">
-							<div class="item use-new-addr" id="J_useNewAddr" data-state="off">
+							<div class="item use-new-addr" id="J_useNewAddr" data-state="off"
+								onclick="">
 								<span class="iconfont icon-add">+</span> 使用新地址
 							</div>
-						</div>
+						<input type="hidden" id="selected_address" name="selected_address" value=""/>
+						@if(Auth::check())
+						@foreach(Auth::user()->addresses as $address)	
+						<div class="item" id="address_{{$address->id}}" data-state="off">
+								<span class="iconfont icon-add" >
+								<p >{{$address->address}}</p>
+								</span> 
+							</div>
+					
+						@endforeach
+						@endif
+							</div>
 						<input type="hidden" name="newAddress[consignee]"
 							id="newConsignee"> <input type="hidden"
 							name="newAddress[province]" id="newProvince"> <input
@@ -29,96 +164,129 @@
 							type="hidden" name="newAddress[zipcode]" id="newZipcode"> <input
 							type="hidden" name="newAddress[tel]" id="newTel"> <input
 							type="hidden" name="newAddress[tag_name]" id="newTag">
-						<div class="xm-edit-addr-box" id="J_editAddrBox">
-							<div class="bd">
-								<div class="item">
-									<label>收货人姓名<span>*</span>
-									</label> <input type="text" name="userAddress[consignee]"
-										id="Consignee" class="input" placeholder="收货人姓名"
-										maxlength="15" autocomplete="off">
-									<p class="tip-msg tipMsg"></p>
+
+						<div class="modal fade" id="delete_category" tabindex="-1"
+							role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal"
+											aria-hidden="true">&times;</button>
+										<h4 class="modal-title">{{ trans('admin.are_you_sure') }}</h4>
+									</div>
+									<div class="modal-body">
+										<p class="lead text-center">{{
+											trans('admin.category_will_be_deleted') }}</p>
+									</div>
+									<div class="modal-footer">
+										<a data-dismiss="modal" href="#delete_category"
+											class="btn btn-default">{{ trans('admin.keep') }}</a> <a
+											href="" id="delete_link" class="btn btn-danger">{{
+											trans('admin.delete') }}</a>
+									</div>
 								</div>
-								<div class="item">
-									<label>联系电话<span>*</span>
-									</label> <input type="text" name="userAddress[tel]"
-										class="input" id="Telephone" placeholder="11位手机号"
-										autocomplete="off">
-									<p class="tel-modify-tip" id="telModifyTip">
-										如果不修改手机号，请重新输入原收货手机号 <em></em> 以便确认
-									</p>
-									<p class="tip-msg tipMsg"></p>
-								</div>
-								<div class="item">
-									<label>地址<span>*</span>
-									</label> <select name="userAddress[province]" id="Provinces"
-										class="select-1"><option value="0">省份/自治区</option>
-										<option zipcode="0" value="2">北京</option>
-										<option zipcode="0" value="3">天津</option>
-										<option zipcode="0" value="4">河北</option>
-										<option zipcode="0" value="5">山西</option>
-										<option zipcode="0" value="6">内蒙古</option>
-										<option zipcode="0" value="7">辽宁</option>
-										<option zipcode="0" value="8">吉林</option>
-										<option zipcode="0" value="9">黑龙江</option>
-										<option zipcode="0" value="10">上海</option>
-										<option zipcode="0" value="11">江苏</option>
-										<option zipcode="0" value="12">浙江</option>
-										<option zipcode="0" value="13">安徽</option>
-										<option zipcode="0" value="14">福建</option>
-										<option zipcode="0" value="15">江西</option>
-										<option zipcode="0" value="16">山东</option>
-										<option zipcode="0" value="17">河南</option>
-										<option zipcode="0" value="18">湖北</option>
-										<option zipcode="0" value="19">湖南</option>
-										<option zipcode="0" value="20">广东</option>
-										<option zipcode="0" value="21">广西</option>
-										<option zipcode="0" value="22">海南</option>
-										<option zipcode="0" value="23">重庆</option>
-										<option zipcode="0" value="24">四川</option>
-										<option zipcode="0" value="25">贵州</option>
-										<option zipcode="0" value="26">云南</option>
-										<option zipcode="0" value="27">西藏</option>
-										<option zipcode="0" value="28">陕西</option>
-										<option zipcode="0" value="29">甘肃</option>
-										<option zipcode="0" value="30">青海</option>
-										<option zipcode="0" value="31">宁夏</option>
-										<option zipcode="0" value="32">新疆</option>
-									</select> <select name="userAddress[city]" id="Citys"
-										class="select-2" disabled="">
-										<option>城市/地区/自治州</option>
-									</select> <select name="userAddress[county]" id="Countys"
-										class="select-3" disabled="">
-										<option>区/县</option>
-									</select>
-									<textarea name="userAddress[street]" class="input-area"
-										id="Street" placeholder="路名或街道地址，门牌号"></textarea>
-									<p class="tip-msg tipMsg"></p>
-								</div>
-								<div class="item">
-									<label>邮政编码<span>*</span>
-									</label> <input type="text" name="userAddress[zipcode]"
-										id="Zipcode" class="input" placeholder="邮政编码"
-										autocomplete="off">
-									<p class="zipcode-tip" id="zipcodeTip"></p>
-									<p class="tip-msg tipMsg"></p>
-								</div>
-								<div class="item">
-									<label>地址标签<span>*</span>
-									</label> <input type="text" name="userAddress[tag]" id="Tag"
-										class="input"
-										placeholder="地址标签：如&quot;家&quot;、&quot;公司&quot;。限5个字内">
-									<p class="tip-msg tipMsg"></p>
-								</div>
+								<!-- /.modal-content -->
 							</div>
-							<div class="ft clearfix">
-								<button type="button" class="btn btn-lineDake btn-small "
-									id="J_editAddrCancel">重新选择地址</button>
-								<button type="button" class="btn btn-primary  btn-small "
-									id="J_editAddrOk">确认收货地址</button>
+							<!-- /.modal-dialog -->
+						</div>
+						<!-- /.modal -->
+
+						<div class="modal xm-edit-addr-box2" id="J_editAddrBox"
+							aria-labelledby="myModalLabel">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="bd1">
+										<div class="item2">
+											<label>收货人姓名<span>*</span>
+											</label> <input type="text" name="userAddress[consignee]"
+												id="Consignee" class="input" placeholder="收货人姓名"
+												maxlength="15" autocomplete="off">
+											<p class="tip-msg tipMsg"></p>
+										</div>
+										<div class="item2">
+											<label>联系电话<span>*</span>
+											</label> <input type="text" name="userAddress[tel]"
+												class="input" id="Telephone" placeholder="11位手机号"
+												autocomplete="off">
+											<p class="tel-modify-tip" id="telModifyTip">
+												如果不修改手机号，请重新输入原收货手机号 <em></em> 以便确认
+											</p>
+											<p class="tip-msg tipMsg"></p>
+										</div>
+										<div class="item2">
+											<label>地址<span>*</span>
+											</label> <select name="userAddress[province]" id="Provinces"
+												class="select-1"><option value="0">省份/自治区</option>
+												<option zipcode="0" value="110000">北京</option>
+												<option zipcode="0" value="120000">天津</option>
+												<option zipcode="0" value="130000">河北</option>
+												<option zipcode="0" value="140000">山西</option>
+												<option zipcode="0" value="150000">内蒙古</option>
+												<option zipcode="0" value="210000">辽宁</option>
+												<option zipcode="0" value="220000">吉林</option>
+												<option zipcode="0" value="230000">黑龙江</option>
+												<option zipcode="0" value="310000">上海</option>
+												<option zipcode="0" value="320000">江苏</option>
+												<option zipcode="0" value="330000">浙江</option>
+												<option zipcode="0" value="340000">安徽</option>
+												<option zipcode="0" value="350000">福建</option>
+												<option zipcode="0" value="360000">江西</option>
+												<option zipcode="0" value="370000">山东</option>
+												<option zipcode="0" value="410000">河南</option>
+												<option zipcode="0" value="420000">湖北</option>
+												<option zipcode="0" value="430000">湖南</option>
+												<option zipcode="0" value="440000">广东</option>
+												<option zipcode="0" value="450000">广西</option>
+												<option zipcode="0" value="460000">海南</option>
+												<option zipcode="0" value="500000">重庆</option>
+												<option zipcode="0" value="510000">四川</option>
+												<option zipcode="0" value="520000">贵州</option>
+												<option zipcode="0" value="530000">云南</option>
+												<option zipcode="0" value="540000">西藏</option>
+												<option zipcode="0" value="610000">陕西</option>
+												<option zipcode="0" value="620000">甘肃</option>
+												<option zipcode="0" value="630000">青海</option>
+												<option zipcode="0" value="640000">宁夏</option>
+												<option zipcode="0" value="650000">新疆</option>
+											</select> <select name="userAddress[city]" id="Citys"
+												class="select-2" disabled="">
+												<option>城市/地区/自治州</option>
+											</select> <select name="userAddress[county]" id="Countys"
+												class="select-3" disabled="">
+												<option>区/县</option>
+											</select>
+											<textarea name="userAddress[street]" class="input-area"
+												id="Street" placeholder="路名或街道地址，门牌号"></textarea>
+											<p class="tip-msg tipMsg"></p>
+										</div>
+										<div class="item2">
+											<label>邮政编码<span>*</span>
+											</label> <input type="text" name="userAddress[zipcode]"
+												id="Zipcode" class="input" placeholder="邮政编码"
+												autocomplete="off">
+											<p class="zipcode-tip" id="zipcodeTip"></p>
+											<p class="tip-msg tipMsg"></p>
+										</div>
+										<div class="item2">
+											<label>地址标签<span>*</span>
+											</label> <input type="text" name="userAddress[tag]" id="Tag"
+												class="input"
+												placeholder="地址标签：如&quot;家&quot;、&quot;公司&quot;。限5个字内">
+											<p class="tip-msg tipMsg"></p>
+										</div>
+									</div>
+									<div class="ft clearfix">
+										<button type="button" class="btn btn-lineDake btn-small "
+											id="J_editAddrCancel">重新选择地址</button>
+										<button type="button" class="btn btn-primary  btn-small "
+											id="J_editAddrOk" onclick="setAddress()">确认收货地址</button>
+									</div>
+								</div>
+								<div class="xm-edit-addr-backdrop" id="J_editAddrBackdrop"></div>
 							</div>
 						</div>
-						<div class="xm-edit-addr-backdrop" id="J_editAddrBackdrop"></div>
 					</div>
+
 				</div>
 				<!-- 收货地址 END-->
 				<div id="checkoutPayment">
@@ -130,7 +298,7 @@
 						<div class="box-bd">
 							<ul id="checkoutPaymentList"
 								class="checkout-option-list clearfix J_optionList">
-								<li class="item selected"><input type="radio"
+								<li class="selected"><input type="radio"
 									name="Checkout[pay_id]" checked="checked" value="1">
 									<p>
 										在线支付 <span></span>
@@ -147,7 +315,8 @@
 						<div class="box-bd">
 							<ul id="checkoutShipmentList"
 								class="checkout-option-list clearfix J_optionList">
-								<li class="item selected"><input type="radio" data-price="0"
+								<li class="selected">
+								<input type="radio" data-price="0"
 									name="Checkout[shipment_id]" checked="checked" value="1">
 									<p>
 										免费配送 <span></span>
@@ -163,20 +332,23 @@
 				<div class="xm-box">
 					<div class="box-hd">
 						<h2 class="title">送货时间</h2>
+						<input type="hidden" id="delivery_time_hidden" name="" value="">
 					</div>
 					<div class="box-bd">
-						<ul class="checkout-option-list clearfix J_optionList">
-							<li class="item selected"><input type="radio" checked="checked"
+						<ul class="checkout-option-list clearfix J_optionList" id="CheckoutTime">
+							<li class=" ">
+
+							<input type="radio" checked="checked"
 								name="Checkout[best_time]" value="1">
 								<p>
 									不限送货时间<span>周一至周日</span>
 								</p></li>
-							<li class="item "><input type="radio" name="Checkout[best_time]"
+							<li class="selected "><input type="radio" name="Checkout[best_time]"
 								value="2">
 								<p>
 									工作日送货<span>周一至周五</span>
 								</p></li>
-							<li class="item "><input type="radio" name="Checkout[best_time]"
+							<li class=" "><input type="radio" name="Checkout[best_time]"
 								value="3">
 								<p>
 									双休日、假日送货<span>周六至周日</span>
@@ -185,70 +357,32 @@
 					</div>
 				</div>
 				<!-- 送货时间 END-->
-				<!-- 发票信息 -->
-				<div id="checkoutInvoice">
+				<!-- 发票信息 --> <!-- TODO: add later  -->
+				<div id="checkoutInvoice" style="display:none;" >
+				
 					<div class="xm-box">
 						<div class="box-hd">
 							<h2 class="title">发票信息</h2>
 						</div>
 						<div class="box-bd">
-							<ul
-								class="checkout-option-list checkout-option-invoice clearfix J_optionList J_optionInvoice">
-								<li class="hide">电子个人发票4</li>
-								<li class="item selected">
-									<!--<label><input type="radio"  class="needInvoice" value="0" name="Checkout[invoice]">不开发票</label>-->
-									<input type="radio" checked="checked" value="4"
-									name="Checkout[invoice]">
-									<p>电子发票</p>
-								</li>
-								<li class="item "><input type="radio" value="1"
-									name="Checkout[invoice]">
-									<p>普通发票</p>
-								</li>
-							</ul>
-							<p id="eInvoiceTip" class="e-invoice-tip ">
-								电子发票是税务局认可的有效凭证，可作为售后维权凭据。开票后不可更换纸质发票，如需报销请选择普通发票。<a
-									href="http://bbs.xiaomi.cn/thread-9285999-1-1.html"
-									target="_blank">什么是电子发票？</a>
-							</p>
-							<div class="invoice-info nvoice-info-1"
-								id="checkoutInvoiceElectronic" style="display: none;">
-
-								<p class="tip">电子发票目前仅对个人用户开具，不可用于单位报销</p>
-								<p>发票内容：购买商品明细</p>
-								<p>发票抬头：个人</p>
-								<p>
-									<span class="hide"><input type="radio" value="4"
-										name="Checkout[invoice_type]" checked="checked"
-										id="electronicPersonal" class="invoiceType"> </span>
-								</p>
-								<dl>
-									<dt>什么是电子发票?</dt>
-									<dd>· 电子发票是纸质发票的映像，是税务局认可的有效凭证，与传统纸质发票具有同等法律效力，可作为售后维权凭据。</dd>
-									<dd>· 开具电子服务于个人，开票后不可更换纸质发票，不可用于单位报销。</dd>
-									<dd>
-										· 您在订单详情的"发票信息"栏可查看、下载您的电子发票。<a
-											href="http://bbs.xiaomi.cn/thread-9285999-1-1.html"
-											target="_blank">什么是电子发票？</a>
-									</dd>
-								</dl>
-								<p></p>
-							</div>
 							<div class="invoice-info invoice-info-2"
-								id="checkoutInvoiceDetail" style="display: none;">
+								id="checkoutInvoiceDetail" style="display: block;">
 								<p>发票内容：购买商品明细</p>
 								<p>发票抬头：请确认单位名称正确,以免因名称错误耽搁您的报销。注：合约机话费仅能开个人发票</p>
 								<ul class="type clearfix J_invoiceType">
-									<li class="hide"><input type="radio" value="0"
+									<li>
+									<input type="radio" value="0"
 										name="Checkout[invoice_type]" id="noNeedInvoice">
 									</li>
-									<li class=""><input class="invoiceType" type="radio"
+									<li class="">
+									<input class="invoiceType" type="radio"
 										id="commonPersonal" name="Checkout[invoice_type]" value="1">
 										个人</li>
-									<li class=""><input class="invoiceType" type="radio"
+									<li class="">
+									<input class="invoiceType" type="radio"
 										name="Checkout[invoice_type]" value="2"> 单位</li>
 								</ul>
-								<div id="CheckoutInvoiceTitle" class=" hide  invoice-title">
+								<div id="CheckoutInvoiceTitle" class=" invoice-title">
 									<label for="Checkout[invoice_title]">单位名称：</label> <input
 										name="Checkout[invoice_title]" type="text" maxlength="49"
 										value="" class="input"> <span class="tip-msg J_tipMsg"></span>
@@ -274,6 +408,9 @@
 									<span class="col col-1">商品名称</span> <span class="col col-2">单品价格</span>
 									<span class="col col-3">购买数量</span> <span class="col col-4">小计</span>
 								</dt>
+								
+								@if(Session::has('cart')) 
+								@foreach(Session::get('cart')->cartitems as $cartitem)
 								<dd class="item clearfix">
 									<div class="item-row">
 										<div class="col col-1">
@@ -284,34 +421,19 @@
 											</div>
 											<div class="g-info">
 												<a href="http://www.mi.com/item/1143300051" target="_blank">
-													MI3配件优惠组合 实用套装 </a>
+													{{$cartitem->product->name}}</a>
 											</div>
 										</div>
 
-										<div class="col col-2">190元</div>
-										<div class="col col-3">1</div>
-										<div class="col col-4">190元</div>
+										<div class="col col-2">{{$cartitem->product->price->price}} </div>
+										<div class="col col-3">{{$cartitem->quantity}}</div>
+										<div class="col col-4">{{$cartitem->quantity * $cartitem->product->price->price}}</div>
 									</div>
 								</dd>
-								<dd class="item clearfix">
-									<div class="item-row">
-										<div class="col col-1">
-											<div class="g-pic">
-												<img src="./填写订单信息_files/T13JCTByCv1RXrhCrK.jpg"
-													srcset="http://img08.mifile.cn/v1/MI_18455B3E4DA706226CF7535A58E875F0267/T13JCTByCv1RXrhCrK.jpg?width=80&amp;height=80 2x"
-													width="40" height="40">
-											</div>
-											<div class="g-info">
-												<a href="http://www.mi.com/item/1134900392" target="_blank">
-													IVS吸盘音箱 橙色 </a>
-											</div>
-										</div>
+								@endforeach
+								@endif
 
-										<div class="col col-2">89元</div>
-										<div class="col col-3">1</div>
-										<div class="col col-4">89元</div>
-									</div>
-								</dd>
+							
 							</dl>
 							<div class="checkout-count clearfix">
 								<div class="checkout-count-extend xm-add-buy">
@@ -370,14 +492,12 @@
 								<!-- checkout-count-extend -->
 								<div class="checkout-price">
 									<ul>
-										<li>商品件数：<span>2件</span>
+										<li>商品件数：<span>{{Session::get('cart')->total_quantity}}</span>
 										</li>
-										<li>金额合计：<span>279元</span>
+										<li>金额合计：<span>{{Session::get('cart')->total_price}}元</span>
+										
 										</li>
-										<li>活动优惠：<span>-0元</span> <script type="text/javascript">
-                                            checkoutConfig.activityDiscountMoney=0;
-                                            checkoutConfig.totalPrice=279.00;
-                                        </script>
+										<li>活动优惠：<span>-0元</span>
 										</li>
 										<li>优惠券抵扣：<span id="couponDesc">-0元</span>
 										</li>

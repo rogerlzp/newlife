@@ -491,7 +491,8 @@ XIAOMI.checkOut.newAddr = {
         }),
         $("#Provinces").change(function() {
             var b = $(this).val();
-            "0" !== b ? (XIAOMI.app.getRegions.getData(b, "Citys"), a.newProvince = $(this).find("option:selected").html()) : (a.newProvince = null, a.newCity = null, a.newCounty = null),
+            "0" !== b ? (XIAOMI.app.getRegions.getData(b, "Citys"), 
+            		a.newProvince = $(this).find("option:selected").html()) : (a.newProvince = null, a.newCity = null, a.newCounty = null),
             $("#Citys").prop("disabled", !0).find("option:gt(0)").remove(),
             $("#Countys").prop("disabled", !0).find("option:gt(0)").remove()
         }),

@@ -190,6 +190,26 @@ class User extends Model implements UserInterface, RemindableInterface
 	}
 	
 	
+	/**
+	 * Query the tricks that the user has posted.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function addresses()
+	{
+		return $this->hasMany('Tricks\Address');
+	}
+	
+
+	/**
+	 * Query the order that the user has posted.
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function torders()
+	{
+		return $this->hasMany('Tricks\Torder');
+	}
 	
 	
 }

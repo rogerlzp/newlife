@@ -9,12 +9,15 @@
 		"league/oauth2-client": "dev-master",
 		"intervention/image": "1.5.*",
 		"thomaswelton/laravel-gravatar": "0.0.*",
-		"roumen/sitemap": "2.4.*"
+		"roumen/sitemap": "2.4.*",
+		"paypal/rest-api-sdk-php":"*"
+		
 	},
 	"require-dev" : {
 		"mockery/mockery"         : "dev-master",
 		"phpunit/phpunit"         : "3.7.*",
-		"codeception/aspect-mock" : "*"
+		"codeception/aspect-mock" : "*",
+		"anouar/paypalpayment": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
